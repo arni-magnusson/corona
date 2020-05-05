@@ -119,7 +119,8 @@ lines(Deaths~I(Date-onset.us), data=us, subset=Date>=onset.us, col=4, lwd=4,
 legend("bottomright", c("Europe","USA"), lwd=c(3,4), lty=c(1,3), col=c(2,4),
        bty="n", inset=0.04)
 plot(log10(Deaths)~I(Date-onset.europe), data=europe, subset=Date>=onset.europe,
-     type="l", col=2, lwd=3, xlab="Days after 100 deaths", yaxt="n")
+     type="l", col=2, lwd=3, main="Europe (de, uk, fr, it, sp) vs. USA",
+     xlab="Days after 100 deaths", yaxt="n")
 axis(2, seq(floor(par("usr")[3]), floor(par("usr")[4])))
 lines(log10(Deaths)~I(Date-onset.us), data=us, subset=Date>=onset.us, col=4,
       lwd=4, lty=3)
