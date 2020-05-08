@@ -1,8 +1,10 @@
-library(arni)                       # na.clean, sort.data.frame
+library(arni)                       # lim, na.clean, sort.data.frame
 suppressMessages(library(gplots))   # rich.colors
 library(icesTAF)                    # zoom
 library(lattice)                    # xyplot
 library(reshape2)                   # melt
+
+source("functions.R")
 
 ## 1  Fetch data
 data <- file.path("https://raw.githubusercontent.com/CSSEGISandData/COVID-19",
@@ -41,7 +43,7 @@ deaths <- deaths[deaths$Deaths>0,]
 
 pop <- lookup[lookup$Province_State=="", c("Country_Region","Population")]
 names(pop)[names(pop)=="Country_Region"] <- "Country"
-rownames(pop) <- NULL
+row.names(pop) <- NULL
 
 corona <- merge(pop, deaths)
 corona <- na.clean(corona)
@@ -49,43 +51,77 @@ row.names(corona) <- NULL
 
 ## 5  Rate (deaths per million) and doubling time
 
-doubling.time <- function(country, data=global)
-{
-  x <- data[data$Country==country,]
-  sum(x$Deaths >= tail(x$Deaths,1) / 2)
-}
-
 corona$Rate <- round(corona$Deaths / corona$Population * 1e6, 1)
 corona$Doubling <- sapply(corona$Country, doubling.time)
 
-rate <- sort(corona, by="Rate")
-rate <- rate[rate$Rate>=40 & rate$Population>1e5,]
+rate <- tail(sort(corona[corona$Population>=1e5,], by="Rate"), 25)
 row.names(rate) <- NULL
 
-doubling <- sort(corona, by="Doubling")
-doubling <- doubling[doubling$Doubling <= 10 & doubling$Deaths >= 20,]
+doubling <- sort(corona[corona$Deaths>=100,], by="Doubling")
+doubling <- doubling[doubling$Doubling<=doubling$Doubling[20],]
 row.names(doubling) <- NULL
 
-## 6  Calculate rank and color
+## Calculate rank and color
 
 rate$Rank <- rate$Doubling - min(rate$Doubling) + 1
 rate$Color <- rich.colors(max(rate$Rank), "blues")[rate$Rank]
 
-doubling$Rank <- floor(log10(doubling$Deaths))
+doubling$Rank <- floor(log(doubling$Deaths))
 doubling$Rank <- doubling$Rank - min(doubling$Rank) + 1
 doubling$Color <- rev(rich.colors(max(doubling$Rank), "blues"))[doubling$Rank]
 
 by <- c(-1,1) * match(c("Doubling","Rank"), names(doubling))
 doubling <- sort(doubling, by=by)
 
-## 7  Plot
+## 6  Sets of countries
+
+europe <- c("Germany", "UK", "France", "Italy", "Spain")
+europe <- global[global$Country %in% europe,]
+europe <- aggregate(Deaths~Date, europe, sum)
+onset.europe <- min(europe$Date[europe$Deaths>=100])
+us <- global[global$Country=="US",]
+onset.us <- min(us$Date[us$Deaths>=100])
+
+worst <- tail(rate$Country, 9)
+current.worst <- corona[corona$Country %in% worst,]
+timeline.worst <- global[global$Country %in% current.worst$Country,]
+
+nordic <- c("Sweden", "Denmark", "Finland", "Norway", "Iceland")
+current.nordic <- corona[corona$Country %in% nordic,]
+timeline.nordic <- global[global$Country %in% nordic,]
+
+latin <- c(
+  "Argentina",
+  "Bolivia",
+  "Brazil",
+  "Chile",
+  "Colombia",
+  ## "Costa Rica",
+  ## "Cuba",
+  "Ecuador",
+  ## "El Salvador",
+  ## "Guatemala",
+  ## "Honduras",
+  ## "Nicaragua",
+  "Panama",
+  ## "Paraguay",
+  "Peru",
+  "Uruguay",
+  ## "Venezuela",
+  NULL
+)
+current.latin <- corona[corona$Country %in% latin,]
+timeline.latin <- global[global$Country %in% latin,]
+
+## 7  Plot current
 
 pdf("plots_current.pdf")
-par(plt=c(0.28, 0.94, 0.15, 0.88))
+opar <- par(plt=c(0.28, 0.94, 0.15, 0.88))
 barplot(rate$Rate, names=rate$Country, horiz=TRUE, las=1, col=NA, border=FALSE)
 grid(nx=NULL, ny=NA, lty=1, lwd=1)
 barplot(rate$Rate, horiz=TRUE, axes=FALSE, col=rate$Color, add=TRUE)
 title(xlab="Deaths per million inhabitants")
+par(opar)
 
 par(plt=c(0.28, 0.94, 0.15, 0.88))
 barplot(doubling$Doubling, names=doubling$Country, horiz=TRUE, las=1, col=NA,
@@ -93,24 +129,19 @@ barplot(doubling$Doubling, names=doubling$Country, horiz=TRUE, las=1, col=NA,
 grid(nx=NULL, ny=NA, lty=1, lwd=1)
 barplot(doubling$Doubling, horiz=TRUE, axes=FALSE, col=doubling$Color, add=TRUE)
 title(xlab="Doubling time of deaths (days)")
+par(opar)
+
+plotXY(current.worst, main="Worst hit")
+plotXY(current.nordic, main="Nordic countries")
+plotXY(current.latin, main="Latin America")
 dev.off()
 
-## 8  Timeline
+## 8  Plot timeline
 
 pdf("plots_timeline.pdf")
-countries <- c("US", "Italy", "Spain", "France", "United Kingdom", "Belgium",
-               "Germany", "Sweden", "Denmark")
-timeline <- global[global$Country %in% countries,]
-start <- as.Date("2020-02-14")
-xyplot(log10(Deaths)~Date, groups=Country, data=timeline, subset=Date>start,
-       auto.key=TRUE, type="l")
+xyplot(log10(Deaths)~Date, groups=Country, data=timeline.worst,
+       subset=Date>"2020-02-14", auto.key=TRUE, type="l")
 
-europe <- c("Germany", "UK", "France", "Italy", "Spain")
-europe <- global[global$Country %in% europe,]
-europe <- aggregate(Deaths~Date, europe, sum)
-onset.europe <- min(europe$Date[europe$Deaths>=100])
-us <- timeline[timeline$Country=="US",]
-onset.us <- min(us$Date[us$Deaths>=100])
 plot(Deaths~I(Date-onset.europe), data=europe, subset=Date>=onset.europe,
      type="l", col=2, lwd=3, main="Europe (de, uk, fr, it, sp) vs. USA",
      xlab="Days after 100 deaths")
@@ -118,6 +149,7 @@ lines(Deaths~I(Date-onset.us), data=us, subset=Date>=onset.us, col=4, lwd=4,
       lty=3)
 legend("bottomright", c("Europe","USA"), lwd=c(3,4), lty=c(1,3), col=c(2,4),
        bty="n", inset=0.04)
+
 plot(log10(Deaths)~I(Date-onset.europe), data=europe, subset=Date>=onset.europe,
      type="l", col=2, lwd=3, main="Europe (de, uk, fr, it, sp) vs. USA",
      xlab="Days after 100 deaths", yaxt="n")
@@ -127,14 +159,22 @@ lines(log10(Deaths)~I(Date-onset.us), data=us, subset=Date>=onset.us, col=4,
 legend("bottomright", c("Europe","USA"), lwd=c(3,4), lty=c(1,3), col=c(2,4),
        bty="n", inset=0.04)
 
-zoom(xyplot(Daily~Date|Country, global,
-            subset=Country %in% countries & Date>="2020-03-01",
-            panel=panel.loess, layout=c(3,3), ylim=c(0,NA), scales="free",
-            ylab="Daily deaths"), 0.6)
+oplt <- par("plt")
 
+par(mfrow=c(3,3))
+out <- lapply(split(timeline.worst, timeline.worst$Country), plotTimeline,
+              span=0.30)
+out <- lapply(split(timeline.nordic, timeline.nordic$Country), plotTimeline,
+              span=0.25)
+par(mfrow=c(3,3))
+out <- lapply(split(timeline.latin, timeline.latin$Country), plotTimeline,
+              span=0.35)
+
+par(mfrow=c(1,1))
+par(plt=oplt)
 plot(log10(Deaths)~Date, world, main="Total deaths worldwide")
 
 plot(Daily~Date, world, main="Daily deaths worldwide", ylab="Deaths")
-lines(world$Date, fitted(loess(Daily~as.integer(Date), world, span=0.3)),
+lines(world$Date, fitted(loess(Daily~as.integer(Date), world, span=0.30)),
       lwd=2, col="darkgreen")
 dev.off()
