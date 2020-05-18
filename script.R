@@ -1,7 +1,6 @@
 library(arni)                       # lim, na.clean, sort.data.frame
 suppressMessages(library(gplots))   # rich.colors
 library(icesTAF)                    # zoom
-library(lattice)                    # xyplot
 library(reshape2)                   # melt
 
 source("functions.R")
@@ -139,8 +138,15 @@ dev.off()
 ## 8  Plot timeline
 
 pdf("plots_timeline.pdf")
-xyplot(log10(Deaths)~Date, groups=Country, data=timeline.worst,
-       subset=Date>"2020-02-14", auto.key=TRUE, type="l")
+split.worst <- split(timeline.worst, timeline.worst$Country)
+plot(NA, xaxt="n", xlab="Date", ylab="log10(Deaths)",
+     xlim=range(timeline.worst$Date), ylim=lim(log10(timeline.worst$Deaths)))
+axt <- pretty(timeline.worst$Date)
+axis(1, axt, format(axt, "1 %b"))
+col <- c(palette(), "red")
+for(i in seq_along(split.worst))
+  lines(log10(Deaths)~Date, data=split.worst[[i]], lwd=2, col=col[i])
+legend("topleft", names(split.worst), lwd=2, col=col, bty="n", inset=0.02, y.intersp=1.1)
 
 plot(Deaths~I(Date-onset.europe), data=europe, subset=Date>=onset.europe,
      type="l", col=2, lwd=3, main="Europe (de, uk, fr, it, sp) vs. USA",
