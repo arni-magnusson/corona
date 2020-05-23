@@ -1,6 +1,5 @@
 library(arni)                       # lim, na.clean, sort.data.frame
 suppressMessages(library(gplots))   # rich.colors
-library(icesTAF)                    # zoom
 library(reshape2)                   # melt
 
 source("functions.R")
