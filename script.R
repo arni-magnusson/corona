@@ -1,6 +1,7 @@
-library(arni)                       # lim, na.clean, sort.data.frame
-suppressMessages(library(gplots))   # rich.colors
-library(reshape2)                   # melt
+library(arni)                      # lim, na.clean, sort.data.frame
+suppressMessages(library(gplots))  # rich.colors
+library(icesTAF)                   # lim
+library(reshape2)                  # melt
 
 source("functions.R")
 
@@ -93,13 +94,14 @@ latin <- c(
   "Bolivia",
   "Brazil",
   "Chile",
-  "Colombia",
+  ## "Colombia",
   ## "Costa Rica",
   ## "Cuba",
   "Ecuador",
   ## "El Salvador",
   ## "Guatemala",
   ## "Honduras",
+  "Mexico",
   ## "Nicaragua",
   "Panama",
   ## "Paraguay",
@@ -145,13 +147,15 @@ axis(1, axt, format(axt, "1 %b"))
 col <- c(palette(), "red")
 for(i in seq_along(split.worst))
   lines(log10(Deaths)~Date, data=split.worst[[i]], lwd=2, col=col[i])
-legend("topleft", names(split.worst), lwd=2, col=col, bty="n", inset=0.02, y.intersp=1.1)
+legend("topleft", names(split.worst), lwd=2, col=col, bty="n", inset=0.02,
+       y.intersp=1.1)
 
-plot(Deaths~I(Date-onset.europe), data=europe, subset=Date>=onset.europe,
-     type="l", col=2, lwd=3, main="Europe (de, uk, fr, it, sp) vs. USA",
-     xlab="Days after 100 deaths")
-lines(Deaths~I(Date-onset.us), data=us, subset=Date>=onset.us, col=4, lwd=4,
-      lty=3)
+plot(Deaths/1000~I(Date-onset.europe), data=europe, subset=Date>=onset.europe,
+     type="l", ylim=lim(c(europe$Deaths, us$Deaths)/1000), col=2, lwd=3,
+     main="Europe (de, uk, fr, it, sp) vs. USA",
+     xlab="Days after 100 deaths", ylab="Deaths (thousands)")
+lines(Deaths/1000~I(Date-onset.us), data=us, subset=Date>=onset.us, col=4,
+      lwd=4, lty=3)
 legend("bottomright", c("Europe","USA"), lwd=c(3,4), lty=c(1,3), col=c(2,4),
        bty="n", inset=0.04)
 
