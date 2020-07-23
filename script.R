@@ -94,7 +94,7 @@ latin <- c(
   "Bolivia",
   "Brazil",
   "Chile",
-  ## "Colombia",
+  "Colombia",
   ## "Costa Rica",
   ## "Cuba",
   "Ecuador",
@@ -106,10 +106,11 @@ latin <- c(
   "Panama",
   ## "Paraguay",
   "Peru",
-  "Uruguay",
+  ## "Uruguay",
   ## "Venezuela",
   NULL
 )
+
 current.latin <- corona[corona$Country %in% latin,]
 timeline.latin <- global[global$Country %in% latin,]
 
