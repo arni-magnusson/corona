@@ -1,4 +1,4 @@
-library(arni)                      # lim, na.clean, sort.data.frame
+library(arni)                      # na.clean, sort.data.frame
 suppressMessages(library(gplots))  # rich.colors
 library(icesTAF)                   # lim
 library(reshape2)                  # melt
@@ -6,6 +6,7 @@ library(reshape2)                  # melt
 source("functions.R")
 
 ## 1  Fetch data
+
 data <- file.path("https://raw.githubusercontent.com/CSSEGISandData/COVID-19",
                   "master/csse_covid_19_data")
 ts <- file.path(data, "csse_covid_19_time_series")
@@ -17,6 +18,7 @@ deaths.us <- read.csv(file.path(ts,"time_series_covid19_deaths_US.csv"),
                       check.names=FALSE)
 
 ## 2  Reshape
+
 global <- deaths.global[-c(1,3,4)]
 names(global)[1] <- "Country"
 global <- melt(global, "Country")
@@ -30,6 +32,7 @@ row.names(global) <- NULL
 global$Deaths[global$Country=="Iceland" & global$Date=="2020-03-15"] <- 0
 
 ## 3  Calculate daily deaths
+
 global$Daily <- c(global$Deaths[1], diff(global$Deaths))
 global$Daily[global$Date == min(global$Date)] <-
   global$Deaths[global$Date == min(global$Date)]
@@ -37,6 +40,7 @@ global$Daily[global$Date == min(global$Date)] <-
 world <- aggregate(cbind(Deaths,Daily)~Date, data=global, sum)
 
 ## 4  Current
+
 deaths <- aggregate(Deaths~Country, global, tail, 1)
 deaths <- deaths[deaths$Deaths>0,]
 
@@ -61,7 +65,6 @@ doubling <- doubling[doubling$Doubling<=doubling$Doubling[20],]
 row.names(doubling) <- NULL
 
 ## Calculate rank and color
-
 rate$Rank <- rate$Doubling - min(rate$Doubling) + 1
 rate$Color <- rich.colors(max(rate$Rank), "blues")[rate$Rank]
 
@@ -117,6 +120,8 @@ timeline.latin <- global[global$Country %in% latin,]
 ## 7  Plot current
 
 pdf("plots_current.pdf")
+
+## Worst deaths
 opar <- par(plt=c(0.28, 0.94, 0.15, 0.88))
 barplot(rate$Rate, names=rate$Country, horiz=TRUE, las=1, col=NA, border=FALSE)
 grid(nx=NULL, ny=NA, lty=1, lwd=1)
@@ -124,6 +129,7 @@ barplot(rate$Rate, horiz=TRUE, axes=FALSE, col=rate$Color, add=TRUE)
 title(xlab="Deaths per million inhabitants")
 par(opar)
 
+## Worst doubling time
 par(plt=c(0.28, 0.94, 0.15, 0.88))
 barplot(doubling$Doubling, names=doubling$Country, horiz=TRUE, las=1, col=NA,
         border=FALSE)
@@ -132,6 +138,7 @@ barplot(doubling$Doubling, horiz=TRUE, axes=FALSE, col=doubling$Color, add=TRUE)
 title(xlab="Doubling time of deaths (days)")
 par(opar)
 
+## Scatterplots
 plotXY(current.worst, main="Worst hit")
 plotXY(current.nordic, main="Nordic countries")
 plotXY(current.latin, main="Latin America")
@@ -140,6 +147,8 @@ dev.off()
 ## 8  Plot timeline
 
 pdf("plots_timeline.pdf")
+
+## Trajectories
 split.worst <- split(timeline.worst, timeline.worst$Country)
 plot(NA, xaxt="n", xlab="Date", ylab="log10(Deaths)",
      xlim=range(timeline.worst$Date), ylim=lim(log10(timeline.worst$Deaths)))
@@ -151,6 +160,7 @@ for(i in seq_along(split.worst))
 legend("topleft", names(split.worst), lwd=2, col=col, bty="n", inset=0.02,
        y.intersp=1.1)
 
+## Europe vs USA
 plot(Deaths/1000~I(Date-onset.europe), data=europe, subset=Date>=onset.europe,
      type="l", ylim=lim(c(europe$Deaths, us$Deaths)/1000), col=2, lwd=3,
      main="Europe (de, uk, fr, it, sp) vs. USA",
@@ -170,8 +180,8 @@ lines(log10(Deaths)~I(Date-onset.us), data=us, subset=Date>=onset.us, col=4,
 legend("bottomright", c("Europe","USA"), lwd=c(3,4), lty=c(1,3), col=c(2,4),
        bty="n", inset=0.04)
 
+## Daily deaths by country
 oplt <- par("plt")
-
 par(mfrow=c(3,3))
 out <- lapply(split(timeline.worst, timeline.worst$Country), plotTimeline,
               span=0.30)
@@ -181,6 +191,7 @@ par(mfrow=c(3,3))
 out <- lapply(split(timeline.latin, timeline.latin$Country), plotTimeline,
               span=0.35)
 
+## Deaths worldwide
 par(mfrow=c(1,1))
 par(plt=oplt)
 plot(log10(Deaths)~Date, world, main="Total deaths worldwide")
@@ -188,4 +199,40 @@ plot(log10(Deaths)~Date, world, main="Total deaths worldwide")
 plot(Daily~Date, world, main="Daily deaths worldwide", ylab="Deaths")
 lines(world$Date, fitted(loess(Daily~as.integer(Date), world, span=0.30)),
       lwd=2, col="darkgreen")
+dev.off()
+
+## 9  Last week
+
+pdf("plots_week.pdf")
+opar <- par(plt=c(0.34, 0.94, 0.15, 0.88))
+dates <- sort(unique(global$Date[global$Date>max(global$Date)-7]))
+
+week <- aggregate(Daily~Country, global, sum, subset=Date%in%dates)
+names(week) <- c("Country", "WeekDeaths")
+week <- merge(corona, week)
+week$WeekRate <- round(week$WeekDeaths / week$Population * 1e6, 1)
+week$PrevDeaths <- week$Deaths - week$WeekDeaths
+week$PrevRate <- week$Rate - week$WeekRate
+week <- tail(sort(week[week$Population>=1e5,], by="WeekRate"), 25)
+row.names(week) <- NULL
+
+## Focus on last week
+barplot(week$WeekRate, names=week$Country, horiz=TRUE, las=1, col=NA,
+        border=FALSE)
+main <- paste0("Last week's deaths ", "(", paste(range(dates), collapse=" to "), ")")
+title(main=main)
+grid(nx=NULL, ny=NA, lty=1, lwd=1)
+barplot(week$WeekRate, horiz=TRUE, axes=FALSE, col="brown", add=TRUE)
+title(xlab="Deaths per million inhabitants")
+
+## Before and last week
+barplot(week$Rate, names=week$Country, horiz=TRUE, las=1, col=NA, border=FALSE)
+main <- paste0("Last week's deaths ", "(", paste(range(dates), collapse=" to "), ")")
+title(main=main)
+grid(nx=NULL, ny=NA, lty=1, lwd=1)
+barplot(week$WeekRate, horiz=TRUE, axes=FALSE, add=TRUE)
+barplot(t(week[c("WeekRate","PrevRate")]), horiz=TRUE, axes=FALSE, col=c("brown","gray95"), add=TRUE)
+title(xlab="Deaths per million inhabitants")
+
+par(opar)
 dev.off()
