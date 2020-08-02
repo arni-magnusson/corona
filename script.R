@@ -92,30 +92,20 @@ nordic <- c("Sweden", "Denmark", "Finland", "Norway", "Iceland")
 current.nordic <- corona[corona$Country %in% nordic,]
 timeline.nordic <- global[global$Country %in% nordic,]
 
-latin <- c(
-  "Argentina",
-  "Bolivia",
-  "Brazil",
-  "Chile",
-  "Colombia",
-  ## "Costa Rica",
-  ## "Cuba",
-  "Ecuador",
-  ## "El Salvador",
-  ## "Guatemala",
-  ## "Honduras",
-  "Mexico",
-  ## "Nicaragua",
-  "Panama",
-  ## "Paraguay",
-  "Peru",
-  ## "Uruguay",
-  ## "Venezuela",
-  NULL
-)
-
+latin <- c("Argentina", "Bolivia", "Brazil", "Chile", "Colombia", "Ecuador",
+           "Mexico", "Panama", "Peru")
 current.latin <- corona[corona$Country %in% latin,]
 timeline.latin <- global[global$Country %in% latin,]
+
+asia <- c("China", "Japan", "Indonesia", "India", "Pakistan", "Bangladesh",
+          "Iran", "Russia", "Turkey")
+current.asia <- corona[corona$Country %in% asia,]
+timeline.asia <- global[global$Country %in% asia,]
+
+africa <- c("Algeria", "Congo (Kinshasa)", "Eswatini", "Ethiopia", "Kenya",
+            "Morocco", "Nigeria", "South Africa", "Sudan")
+current.africa <- corona[corona$Country %in% africa,]
+timeline.africa <- global[global$Country %in% africa,]
 
 ## 7  Plot current
 
@@ -142,6 +132,8 @@ par(opar)
 plotXY(current.worst, main="Worst hit")
 plotXY(current.nordic, main="Nordic countries")
 plotXY(current.latin, main="Latin America")
+plotXY(current.asia, main="Asia")
+plotXY(current.africa, main="Africa")
 dev.off()
 
 ## 8  Plot timeline
@@ -190,6 +182,12 @@ out <- lapply(split(timeline.nordic, timeline.nordic$Country), plotTimeline,
 par(mfrow=c(3,3))
 out <- lapply(split(timeline.latin, timeline.latin$Country), plotTimeline,
               span=0.35)
+par(mfrow=c(3,3))
+out <- lapply(split(timeline.asia, timeline.asia$Country), plotTimeline,
+              span=0.30)
+par(mfrow=c(3,3))
+out <- lapply(split(timeline.africa, timeline.africa$Country), plotTimeline,
+              span=0.30)
 
 ## Deaths worldwide
 par(mfrow=c(1,1))
