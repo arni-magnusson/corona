@@ -113,19 +113,18 @@ pdf("plots_current.pdf")
 
 ## Worst deaths
 opar <- par(plt=c(0.28, 0.94, 0.15, 0.88))
-barplot(rate$Rate, names=rate$Country, horiz=TRUE, las=1, col=NA, border=FALSE)
+barplot(rate$Rate, names=rate$Country, horiz=TRUE, las=1, col=NA, border=FALSE,
+        xlab="Deaths per million inhabitants")
 grid(nx=NULL, ny=NA, lty=1, lwd=1)
 barplot(rate$Rate, horiz=TRUE, axes=FALSE, col=rate$Color, add=TRUE)
-title(xlab="Deaths per million inhabitants")
 par(opar)
 
 ## Worst doubling time
 par(plt=c(0.28, 0.94, 0.15, 0.88))
 barplot(doubling$Doubling, names=doubling$Country, horiz=TRUE, las=1, col=NA,
-        border=FALSE)
+        border=FALSE, xlab="Doubling time of deaths (days)")
 grid(nx=NULL, ny=NA, lty=1, lwd=1)
 barplot(doubling$Doubling, horiz=TRUE, axes=FALSE, col=doubling$Color, add=TRUE)
-title(xlab="Doubling time of deaths (days)")
 par(opar)
 
 ## Scatterplots
@@ -211,26 +210,39 @@ week <- merge(corona, week)
 week$WeekRate <- round(week$WeekDeaths / week$Population * 1e6, 1)
 week$PrevDeaths <- week$Deaths - week$WeekDeaths
 week$PrevRate <- week$Rate - week$WeekRate
+week.all <- week
 week <- tail(sort(week[week$Population>=1e5,], by="WeekRate"), 25)
 row.names(week) <- NULL
 
-## Focus on last week
+main.week <- paste0("Last week ", "(",
+                    paste(range(dates), collapse=" to "), ")")
+
+## Death rate last week
 barplot(week$WeekRate, names=week$Country, horiz=TRUE, las=1, col=NA,
-        border=FALSE)
-main <- paste0("Last week's deaths ", "(", paste(range(dates), collapse=" to "), ")")
-title(main=main)
+        border=FALSE, main=main.week, xlab="Deaths per million inhabitants")
 grid(nx=NULL, ny=NA, lty=1, lwd=1)
 barplot(week$WeekRate, horiz=TRUE, axes=FALSE, col="brown", add=TRUE)
-title(xlab="Deaths per million inhabitants")
 
-## Before and last week
-barplot(week$Rate, names=week$Country, horiz=TRUE, las=1, col=NA, border=FALSE)
-main <- paste0("Last week's deaths ", "(", paste(range(dates), collapse=" to "), ")")
-title(main=main)
+## Death rate last week and before
+barplot(week$Rate, names=week$Country, horiz=TRUE, las=1, col=NA, border=FALSE,
+        main=main.week, xlab="Deaths per million inhabitants")
 grid(nx=NULL, ny=NA, lty=1, lwd=1)
-barplot(week$WeekRate, horiz=TRUE, axes=FALSE, add=TRUE)
-barplot(t(week[c("WeekRate","PrevRate")]), horiz=TRUE, axes=FALSE, col=c("brown","gray95"), add=TRUE)
-title(xlab="Deaths per million inhabitants")
+barplot(t(week[c("WeekRate","PrevRate")]), horiz=TRUE, axes=FALSE,
+        col=c("brown","gray95"), add=TRUE)
+
+## Deaths last week
+w <- week.all[c("Country","WeekDeaths")]
+cutoff <- sort(w$WeekDeaths, decreasing=TRUE)[10]
+w$Country[w$WeekDeaths < cutoff] <- "Other"
+w <- aggregate(WeekDeaths~Country, w, sum)
+
+w <- sort(w, by="WeekDeaths")
+barplot(w$WeekDeaths[w$Country!="Other"]/7, names=w$Country[w$Country!="Other"],
+        horiz=TRUE, las=1, col=NA, border=FALSE, main=main.week,
+        xlab="Average daily deaths")
+grid(nx=NULL, ny=NA, lty=1, lwd=1)
+barplot(w$WeekDeaths[w$Country!="Other"]/7, horiz=TRUE, axes=FALSE,
+        col="orange", add=TRUE)
 
 par(opar)
 dev.off()
