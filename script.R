@@ -148,7 +148,7 @@ axis(1, axt, format(axt, "1 %b"))
 col <- c(palette(), "red")
 for(i in seq_along(split.worst))
   lines(log10(Deaths)~Date, data=split.worst[[i]], lwd=2, col=col[i])
-legend("topleft", names(split.worst), lwd=2, col=col, bty="n", inset=0.02,
+legend("bottomright", names(split.worst), lwd=2, col=col, bty="n", inset=0.02,
        y.intersp=1.1)
 
 ## Europe vs USA
