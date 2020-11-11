@@ -1,3 +1,19 @@
+library(reshape2)  # melt
+
+rearrange <- function(x, colname="Count")
+{
+  x <- x[-c(1,3,4)]
+  names(x)[1] <- "Country"
+  x <- melt(x, "Country")
+  names(x) <- c("Country", "Date", "Value")
+  x$Date <- as.Date(x$Date, "%m/%d/%y")
+  x <- aggregate(Value~Country+Date, x, sum)
+  x <- sort(x, by=1:2)
+  row.names(x) <- NULL
+  names(x) <- c("Country", "Date", colname)
+  x
+}
+
 doubling.time <- function(country, data=global)
 {
   x <- data[data$Country==country,]

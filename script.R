@@ -1,7 +1,6 @@
 library(arni)                      # na.clean, sort.data.frame
 suppressMessages(library(gplots))  # rich.colors
 library(icesTAF)                   # lim
-library(reshape2)                  # melt
 
 source("functions.R")
 
@@ -17,14 +16,7 @@ deaths.global <- read.csv(file.path(ts,"time_series_covid19_deaths_global.csv"),
 
 ## 2  Reshape
 
-global <- deaths.global[-c(1,3,4)]
-names(global)[1] <- "Country"
-global <- melt(global, "Country")
-names(global) <- c("Country", "Date", "Deaths")
-global$Date <- as.Date(global$Date, "%m/%d/%y")
-global <- aggregate(Deaths~Country+Date, global, sum)
-global <- sort(global, by=1:2)
-row.names(global) <- NULL
+global <- rearrange(deaths.global, "Deaths")
 
 ## Correction
 global$Deaths[global$Country=="Iceland" & global$Date=="2020-03-15"] <- 0
