@@ -104,7 +104,7 @@ timeline.africa <- global[global$Country %in% africa,]
 
 ## 7  Plot current
 
-pdf("plots_current.pdf")
+pdf("deaths_current.pdf")
 
 ## Worst deaths
 opar <- par(plt=c(0.30, 0.94, 0.15, 0.88))
@@ -133,7 +133,7 @@ dev.off()
 
 ## 8  Plot timeline
 
-pdf("plots_timeline.pdf")
+pdf("deaths_timeline.pdf")
 
 ## Trajectories
 split.worst <- split(timeline.worst, timeline.worst$Country)
@@ -200,7 +200,7 @@ dev.off()
 
 ## 9  Last week
 
-pdf("plots_week.pdf")
+pdf("deaths_week.pdf")
 opar <- par(plt=c(0.34, 0.94, 0.15, 0.88))
 dates <- sort(unique(global$Date[global$Date>max(global$Date)-7]))
 
