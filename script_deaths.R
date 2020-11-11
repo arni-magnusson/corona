@@ -43,7 +43,7 @@ row.names(current) <- NULL
 ## 5  Rate (deaths per million) and doubling time
 
 current$Rate <- round(current$Deaths / current$Population * 1e6, 1)
-current$Doubling <- sapply(current$Country, doubling.time)
+current$Doubling <- sapply(current$Country, doubling.time, column="Deaths")
 
 rate <- tail(sort(current[current$Population>=1e5,], by="Rate"), 25)
 row.names(rate) <- NULL
@@ -123,12 +123,13 @@ barplot(doubling$Doubling, horiz=TRUE, axes=FALSE, col=doubling$Color, add=TRUE)
 par(opar)
 
 ## Scatterplots
-plotXY(current.worst, main="Worst hit")
-plotXY(current.nordic, main="Nordic countries")
-plotXY(current.latin, main="Latin America")
-plotXY(current.europe, main="Europe")
-plotXY(current.asia, main="Asia")
-plotXY(current.africa, main="Africa")
+ylab <- "Deaths per million"
+plotXY(current.worst,  ylab=ylab, main="Worst hit")
+plotXY(current.nordic, ylab=ylab, main="Nordic countries")
+plotXY(current.latin,  ylab=ylab, main="Latin America")
+plotXY(current.europe, ylab=ylab, main="Europe")
+plotXY(current.asia,   ylab=ylab, main="Asia")
+plotXY(current.africa, ylab=ylab, main="Africa")
 dev.off()
 
 ## 8  Plot timeline

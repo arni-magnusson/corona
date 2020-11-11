@@ -14,10 +14,10 @@ rearrange <- function(x, colname="Count")
   x
 }
 
-doubling.time <- function(country, data=timeline)
+doubling.time <- function(country, column, data=timeline)
 {
   x <- data[data$Country==country,]
-  sum(x$Deaths >= tail(x$Deaths,1) / 2)
+  sum(x[[column]] >= tail(x[[column]],1) / 2)
 }
 
 plotTimeline <- function(data, start="2020-03-01", ylim=NULL, lwd=3, col.line=4,
@@ -37,11 +37,10 @@ plotTimeline <- function(data, start="2020-03-01", ylim=NULL, lwd=3, col.line=4,
   par(opar)
 }
 
-plotXY <- function(data, ...)
+plotXY <- function(data, ylab="", ...)
 {
   ## data contains Country, Doubling, Rate
   plot(Rate~Doubling, data, type="n", xlim=c(range(data$Doubling) + c(-2,2)),
-       ylim=lim(data$Rate), xlab="Doubling time (days)",
-       ylab="Deaths per million", ...)
+       ylim=lim(data$Rate), xlab="Doubling time (days)", ylab=ylab, ...)
   text(Rate~Doubling, data, data$Country, ...)
 }
