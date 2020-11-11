@@ -16,41 +16,39 @@ deaths.global <- read.csv(file.path(ts,"time_series_covid19_deaths_global.csv"),
 
 ## 2  Reshape
 
-global <- rearrange(deaths.global, "Deaths")
+timeline <- rearrange(deaths.global, "Deaths")
 
 ## Correction
-global$Deaths[global$Country=="Iceland" & global$Date=="2020-03-15"] <- 0
+timeline$Deaths[timeline$Country=="Iceland" & timeline$Date=="2020-03-15"] <- 0
 
 ## 3  Calculate daily statistics
 
-global$Daily <- c(global$Deaths[1], diff(global$Deaths))
-global$Daily[global$Date == min(global$Date)] <-
-  global$Deaths[global$Date == min(global$Date)]
-
-world <- aggregate(cbind(Deaths,Daily)~Date, data=global, sum)
+timeline$Daily <- c(timeline$Deaths[1], diff(timeline$Deaths))
+timeline$Daily[timeline$Date == min(timeline$Date)] <-
+  timeline$Deaths[timeline$Date == min(timeline$Date)]
 
 ## 4  Current
 
-deaths <- aggregate(Deaths~Country, global, tail, 1)
+deaths <- aggregate(Deaths~Country, timeline, tail, 1)
 deaths <- deaths[deaths$Deaths>0,]
 
 pop <- lookup[lookup$Province_State=="", c("Country_Region","Population")]
 names(pop)[names(pop)=="Country_Region"] <- "Country"
 row.names(pop) <- NULL
 
-corona <- merge(pop, deaths)
-corona <- na.clean(corona)
-row.names(corona) <- NULL
+current <- merge(pop, deaths)
+current <- na.clean(current)
+row.names(current) <- NULL
 
 ## 5  Rate (deaths per million) and doubling time
 
-corona$Rate <- round(corona$Deaths / corona$Population * 1e6, 1)
-corona$Doubling <- sapply(corona$Country, doubling.time)
+current$Rate <- round(current$Deaths / current$Population * 1e6, 1)
+current$Doubling <- sapply(current$Country, doubling.time)
 
-rate <- tail(sort(corona[corona$Population>=1e5,], by="Rate"), 25)
+rate <- tail(sort(current[current$Population>=1e5,], by="Rate"), 25)
 row.names(rate) <- NULL
 
-doubling <- sort(corona[corona$Deaths>=100,], by="Doubling")
+doubling <- sort(current[current$Deaths>=100,], by="Doubling")
 doubling <- doubling[doubling$Doubling<=doubling$Doubling[20],]
 row.names(doubling) <- NULL
 
@@ -67,40 +65,42 @@ doubling <- sort(doubling, by=by)
 
 ## 6  Sets of countries
 
+world <- aggregate(cbind(Deaths,Daily)~Date, data=timeline, sum)
+
 euro5 <- c("Germany", "UK", "France", "Italy", "Spain")
-euro5 <- global[global$Country %in% euro5,]
+euro5 <- timeline[timeline$Country %in% euro5,]
 euro5 <- aggregate(Deaths~Date, euro5, sum)
 onset.euro5 <- min(euro5$Date[euro5$Deaths>=100])
-us <- global[global$Country=="US",]
+us <- timeline[timeline$Country=="US",]
 onset.us <- min(us$Date[us$Deaths>=100])
 
 worst <- tail(rate$Country, 9)
-current.worst <- corona[corona$Country %in% worst,]
-timeline.worst <- global[global$Country %in% current.worst$Country,]
+current.worst <- current[current$Country %in% worst,]
+timeline.worst <- timeline[timeline$Country %in% current.worst$Country,]
 
 nordic <- c("Sweden", "Denmark", "Finland", "Norway", "Iceland")
-current.nordic <- corona[corona$Country %in% nordic,]
-timeline.nordic <- global[global$Country %in% nordic,]
+current.nordic <- current[current$Country %in% nordic,]
+timeline.nordic <- timeline[timeline$Country %in% nordic,]
 
 latin <- c("Argentina", "Bolivia", "Brazil", "Chile", "Colombia", "Ecuador",
            "Mexico", "Panama", "Peru")
-current.latin <- corona[corona$Country %in% latin,]
-timeline.latin <- global[global$Country %in% latin,]
+current.latin <- current[current$Country %in% latin,]
+timeline.latin <- timeline[timeline$Country %in% latin,]
 
 europe <- c("Belgium", "France", "Germany", "Italy", "Netherlands", "Portugal",
             "Spain", "Switzerland", "United Kingdom")
-current.europe <- corona[corona$Country %in% europe,]
-timeline.europe <- global[global$Country %in% europe,]
+current.europe <- current[current$Country %in% europe,]
+timeline.europe <- timeline[timeline$Country %in% europe,]
 
 asia <- c("China", "Japan", "Indonesia", "India", "Pakistan", "Bangladesh",
           "Iran", "Russia", "Turkey")
-current.asia <- corona[corona$Country %in% asia,]
-timeline.asia <- global[global$Country %in% asia,]
+current.asia <- current[current$Country %in% asia,]
+timeline.asia <- timeline[timeline$Country %in% asia,]
 
 africa <- c("Algeria", "Congo (Kinshasa)", "Eswatini", "Ethiopia", "Kenya",
             "Morocco", "Nigeria", "South Africa", "Sudan")
-current.africa <- corona[corona$Country %in% africa,]
-timeline.africa <- global[global$Country %in% africa,]
+current.africa <- current[current$Country %in% africa,]
+timeline.africa <- timeline[timeline$Country %in% africa,]
 
 ## 7  Plot current
 
@@ -202,11 +202,11 @@ dev.off()
 
 pdf("deaths_week.pdf")
 opar <- par(plt=c(0.34, 0.94, 0.15, 0.88))
-dates <- sort(unique(global$Date[global$Date>max(global$Date)-7]))
+dates <- sort(unique(timeline$Date[timeline$Date>max(timeline$Date)-7]))
 
-week <- aggregate(Daily~Country, global, sum, subset=Date%in%dates)
+week <- aggregate(Daily~Country, timeline, sum, subset=Date%in%dates)
 names(week) <- c("Country", "WeekDeaths")
-week <- merge(corona, week)
+week <- merge(current, week)
 week$WeekRate <- round(week$WeekDeaths / week$Population * 1e6, 1)
 week$PrevDeaths <- week$Deaths - week$WeekDeaths
 week$PrevRate <- week$Rate - week$WeekRate

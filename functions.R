@@ -14,7 +14,7 @@ rearrange <- function(x, colname="Count")
   x
 }
 
-doubling.time <- function(country, data=global)
+doubling.time <- function(country, data=timeline)
 {
   x <- data[data$Country==country,]
   sum(x$Deaths >= tail(x$Deaths,1) / 2)
