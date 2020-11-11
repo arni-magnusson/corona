@@ -14,8 +14,6 @@ ts <- file.path(data, "csse_covid_19_time_series")
 lookup <- read.csv(file.path(data,"UID_ISO_FIPS_LookUp_Table.csv"))
 deaths.global <- read.csv(file.path(ts,"time_series_covid19_deaths_global.csv"),
                           check.names=FALSE)
-deaths.us <- read.csv(file.path(ts,"time_series_covid19_deaths_US.csv"),
-                      check.names=FALSE)
 
 ## 2  Reshape
 
@@ -31,7 +29,7 @@ row.names(global) <- NULL
 ## Correction
 global$Deaths[global$Country=="Iceland" & global$Date=="2020-03-15"] <- 0
 
-## 3  Calculate daily deaths
+## 3  Calculate daily statistics
 
 global$Daily <- c(global$Deaths[1], diff(global$Deaths))
 global$Daily[global$Date == min(global$Date)] <-
@@ -77,10 +75,10 @@ doubling <- sort(doubling, by=by)
 
 ## 6  Sets of countries
 
-europe <- c("Germany", "UK", "France", "Italy", "Spain")
-europe <- global[global$Country %in% europe,]
-europe <- aggregate(Deaths~Date, europe, sum)
-onset.europe <- min(europe$Date[europe$Deaths>=100])
+euro5 <- c("Germany", "UK", "France", "Italy", "Spain")
+euro5 <- global[global$Country %in% euro5,]
+euro5 <- aggregate(Deaths~Date, euro5, sum)
+onset.euro5 <- min(euro5$Date[euro5$Deaths>=100])
 us <- global[global$Country=="US",]
 onset.us <- min(us$Date[us$Deaths>=100])
 
@@ -97,6 +95,11 @@ latin <- c("Argentina", "Bolivia", "Brazil", "Chile", "Colombia", "Ecuador",
 current.latin <- corona[corona$Country %in% latin,]
 timeline.latin <- global[global$Country %in% latin,]
 
+europe <- c("Belgium", "France", "Germany", "Italy", "Netherlands", "Portugal",
+            "Spain", "Switzerland", "United Kingdom")
+current.europe <- corona[corona$Country %in% europe,]
+timeline.europe <- global[global$Country %in% europe,]
+
 asia <- c("China", "Japan", "Indonesia", "India", "Pakistan", "Bangladesh",
           "Iran", "Russia", "Turkey")
 current.asia <- corona[corona$Country %in% asia,]
@@ -112,7 +115,7 @@ timeline.africa <- global[global$Country %in% africa,]
 pdf("plots_current.pdf")
 
 ## Worst deaths
-opar <- par(plt=c(0.28, 0.94, 0.15, 0.88))
+opar <- par(plt=c(0.30, 0.94, 0.15, 0.88))
 barplot(rate$Rate, names=rate$Country, horiz=TRUE, las=1, col=NA, border=FALSE,
         xlab="Deaths per million inhabitants")
 grid(nx=NULL, ny=NA, lty=1, lwd=1)
@@ -120,7 +123,7 @@ barplot(rate$Rate, horiz=TRUE, axes=FALSE, col=rate$Color, add=TRUE)
 par(opar)
 
 ## Worst doubling time
-par(plt=c(0.28, 0.94, 0.15, 0.88))
+par(plt=c(0.30, 0.94, 0.15, 0.88))
 barplot(doubling$Doubling, names=doubling$Country, horiz=TRUE, las=1, col=NA,
         border=FALSE, xlab="Doubling time of deaths (days)")
 grid(nx=NULL, ny=NA, lty=1, lwd=1)
@@ -131,6 +134,7 @@ par(opar)
 plotXY(current.worst, main="Worst hit")
 plotXY(current.nordic, main="Nordic countries")
 plotXY(current.latin, main="Latin America")
+plotXY(current.europe, main="Europe")
 plotXY(current.asia, main="Asia")
 plotXY(current.africa, main="Africa")
 dev.off()
@@ -152,8 +156,8 @@ legend("bottomright", names(split.worst), lwd=2, col=col, bty="n", inset=0.02,
        y.intersp=1.1)
 
 ## Europe vs USA
-plot(Deaths/1000~I(Date-onset.europe), data=europe, subset=Date>=onset.europe,
-     type="l", ylim=lim(c(europe$Deaths, us$Deaths)/1000), col=2, lwd=3,
+plot(Deaths/1000~I(Date-onset.euro5), data=euro5, subset=Date>=onset.euro5,
+     type="l", ylim=lim(c(euro5$Deaths, us$Deaths)/1000), col=2, lwd=3,
      main="Europe (de, uk, fr, it, sp) vs. USA",
      xlab="Days after 100 deaths", ylab="Deaths (thousands)")
 lines(Deaths/1000~I(Date-onset.us), data=us, subset=Date>=onset.us, col=4,
@@ -161,8 +165,8 @@ lines(Deaths/1000~I(Date-onset.us), data=us, subset=Date>=onset.us, col=4,
 legend("bottomright", c("Europe","USA"), lwd=c(3,4), lty=c(1,3), col=c(2,4),
        bty="n", inset=0.04)
 
-plot(log10(Deaths)~I(Date-onset.europe), data=europe, subset=Date>=onset.europe,
-     type="l", ylim=c(2, log10(1.05*max(c(europe$deaths, us$Deaths)))), col=2,
+plot(log10(Deaths)~I(Date-onset.euro5), data=euro5, subset=Date>=onset.euro5,
+     type="l", ylim=c(2, log10(1.05*max(c(euro5$deaths, us$Deaths)))), col=2,
      lwd=3, main="Europe (de, uk, fr, it, sp) vs. USA",
      xlab="Days after 100 deaths", yaxt="n")
 axis(2, seq(floor(par("usr")[3]), floor(par("usr")[4])))
@@ -176,10 +180,14 @@ oplt <- par("plt")
 par(mfrow=c(3,3))
 out <- lapply(split(timeline.worst, timeline.worst$Country), plotTimeline,
               span=0.30)
+par(mfrow=c(3,3))
 out <- lapply(split(timeline.nordic, timeline.nordic$Country), plotTimeline,
               span=0.25)
 par(mfrow=c(3,3))
 out <- lapply(split(timeline.latin, timeline.latin$Country), plotTimeline,
+              span=0.35)
+par(mfrow=c(3,3))
+out <- lapply(split(timeline.europe, timeline.europe$Country), plotTimeline,
               span=0.35)
 par(mfrow=c(3,3))
 out <- lapply(split(timeline.asia, timeline.asia$Country), plotTimeline,
