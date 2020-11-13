@@ -1,16 +1,7 @@
-library(arni)                      # na.clean, sort.data.frame
-suppressMessages(library(gplots))  # rich.colors
-library(icesTAF)                   # lim
-
-source("functions.R")
+source("script_both.R")
 
 ## 1  Fetch data
 
-data <- file.path("https://raw.githubusercontent.com/CSSEGISandData/COVID-19",
-                  "master/csse_covid_19_data")
-ts <- file.path(data, "csse_covid_19_time_series")
-
-lookup <- read.csv(file.path(data,"UID_ISO_FIPS_LookUp_Table.csv"))
 deaths.global <- read.csv(file.path(ts,"time_series_covid19_deaths_global.csv"),
                           check.names=FALSE)
 
@@ -31,10 +22,6 @@ timeline$Daily[timeline$Date == min(timeline$Date)] <-
 
 deaths <- aggregate(Deaths~Country, timeline, tail, 1)
 deaths <- deaths[deaths$Deaths>0,]
-
-pop <- lookup[lookup$Province_State=="", c("Country_Region","Population")]
-names(pop)[names(pop)=="Country_Region"] <- "Country"
-row.names(pop) <- NULL
 
 current <- merge(pop, deaths)
 current <- na.clean(current)
@@ -67,7 +54,6 @@ doubling <- sort(doubling, by=by)
 
 world <- aggregate(cbind(Deaths,Daily)~Date, data=timeline, sum)
 
-euro5 <- c("Germany", "UK", "France", "Italy", "Spain")
 euro5 <- timeline[timeline$Country %in% euro5,]
 euro5 <- aggregate(Deaths~Date, euro5, sum)
 onset.euro5 <- min(euro5$Date[euro5$Deaths>=100])
@@ -78,27 +64,18 @@ worst <- tail(rate$Country, 9)
 current.worst <- current[current$Country %in% worst,]
 timeline.worst <- timeline[timeline$Country %in% current.worst$Country,]
 
-nordic <- c("Sweden", "Denmark", "Finland", "Norway", "Iceland")
 current.nordic <- current[current$Country %in% nordic,]
 timeline.nordic <- timeline[timeline$Country %in% nordic,]
 
-latin <- c("Argentina", "Bolivia", "Brazil", "Chile", "Colombia", "Ecuador",
-           "Mexico", "Panama", "Peru")
 current.latin <- current[current$Country %in% latin,]
 timeline.latin <- timeline[timeline$Country %in% latin,]
 
-europe <- c("Belgium", "France", "Germany", "Italy", "Netherlands", "Portugal",
-            "Spain", "Switzerland", "United Kingdom")
 current.europe <- current[current$Country %in% europe,]
 timeline.europe <- timeline[timeline$Country %in% europe,]
 
-asia <- c("China", "Japan", "Indonesia", "India", "Pakistan", "Bangladesh",
-          "Iran", "Russia", "Turkey")
 current.asia <- current[current$Country %in% asia,]
 timeline.asia <- timeline[timeline$Country %in% asia,]
 
-africa <- c("Algeria", "Congo (Kinshasa)", "Eswatini", "Ethiopia", "Kenya",
-            "Morocco", "Nigeria", "South Africa", "Sudan")
 current.africa <- current[current$Country %in% africa,]
 timeline.africa <- timeline[timeline$Country %in% africa,]
 
