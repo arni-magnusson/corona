@@ -43,7 +43,7 @@ plotTime <- function(x, main="", ...)
 {
   xyplot(TwoWeeks~Date|Ordered, timeline, subset=Country %in% x, type="l",
          lwd=2, ylim=c(0, NA), as.table=TRUE, par.settings=pars,
-         par.strip.text=list(cex=0.7), main=main, ...)
+         par.strip.text=list(cex=0.7), main=main, ylab="Index", ...)
 }
 
 pdf("ecdc_timeline.pdf")
