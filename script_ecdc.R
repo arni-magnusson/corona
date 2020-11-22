@@ -1,4 +1,4 @@
-library(arni)  # sort.data.frame
+library(arni)     # sort.data.frame
 library(lattice)  # xyplot
 
 ## 1  Fetch data
@@ -38,12 +38,12 @@ africa <- c("Algeria", "Cape_Verde", "Congo", "Egypt", "Eswatini", "Ethiopia",
 ## 5  Plot timeline
 
 pars <- list(axis.text=list(cex=0.7), par.xlab.text=list(cex=0.7),
-             par.ylab.text=list(cex=0.7))
+             par.ylab.text=list(cex=0.7), plot.line=list(lwd=2))
 plotTime <- function(x, main="", ...)
 {
-  xyplot(TwoWeeks~Date|Ordered, timeline, subset=Country %in% x, type="l",
-         lwd=2, ylim=c(0, NA), as.table=TRUE, par.settings=pars,
-         par.strip.text=list(cex=0.7), main=main, ylab="Index", ...)
+  print(xyplot(TwoWeeks~Date|Ordered, timeline, subset=Country %in% x, type="l",
+               ylim=c(0, NA), as.table=TRUE, par.settings=pars,
+               par.strip.text=list(cex=0.7), main=main, ylab="Index", ...))
 }
 
 pdf("ecdc_timeline.pdf")
