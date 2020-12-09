@@ -1,7 +1,7 @@
 ## Prepare plots and tables for Johns Hopkins deaths
 
 ## Before: jh_deaths_current.csv, jh_deaths_doubling.csv, jh_deaths_rate.csv,
-##         jh_deaths_timeline.csv (data), jh_countries.RData (model)
+##         jh_deaths_timeline.csv (data), jh_countries.RData (output)
 ## After:  jh_deaths_current.pdf, jh_deaths_timeline.pdf (report)
 
 library(icesTAF)
@@ -14,7 +14,7 @@ current <- read.taf("data/jh_deaths_current.csv")
 doubling <- read.taf("data/jh_deaths_doubling.csv")
 rate <- read.taf("data/jh_deaths_rate.csv")
 timeline <- read.taf("data/jh_deaths_timeline.csv")
-load("model/jh_countries.RData")  # africa, asia, euro5, europe, latin, nordic
+load("output/jh_countries.RData")  # africa, asia, euro5, europe, latin, nordic
 timeline$Date <- as.Date(timeline$Date)
 
 ## World
