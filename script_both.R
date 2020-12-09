@@ -2,7 +2,7 @@ library(arni)                      # na.clean, sort.data.frame
 suppressMessages(library(gplots))  # rich.colors
 library(icesTAF)                   # lim
 
-source("functions.R")
+source("utilities.R")
 
 ## 1  Fetch data
 
