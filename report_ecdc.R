@@ -1,6 +1,7 @@
 ## Prepare ECDC plots and tables for report
 
-## Before: ecdc_timeline.csv (data), ecdc_peak.csv, ecdc_countries.RData (model)
+## Before: ecdc_timeline.csv (data), ecdc_peak.csv,
+##         ecdc_countries.RData (output)
 ## After:  ecdc_current.pdf, ecdc_timeline.pdf (report)
 
 library(icesTAF)
@@ -10,8 +11,8 @@ mkdir("report")
 
 ## Read data
 timeline <- read.taf("data/ecdc_timeline.csv")
-peak <- read.taf("model/ecdc_peak.csv")
-load("model/ecdc_countries.RData")  # worst,europe,nordic,america,asia,africa
+peak <- read.taf("output/ecdc_peak.csv")
+load("output/ecdc_countries.RData")  # worst,europe,nordic,america,asia,africa
 timeline$Date <- as.Date(timeline$Date)
 timeline$Ordered <- ordered(timeline$Country, levels=rev(peak$Country))
 
