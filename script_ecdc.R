@@ -34,8 +34,9 @@ america <- c("Argentina", "Bolivia", "Brazil", "Canada", "Chile", "Colombia",
              "United_States_of_America", "Uruguay", "Venezuela")
 asia <- c("Bangladesh", "China", "India", "Indonesia", "Iran", "Israel",
           "Japan", "Pakistan", "Philippines", "Russia", "Singapore", "Turkey")
-africa <- c("Algeria", "Cape_Verde", "Congo", "Egypt", "Eswatini", "Ethiopia",
-            "Kenya", "Libya", "Morocco", "Nigeria", "South_Africa", "Tunisia")
+africa <- c("Algeria", "Cape_Verde", "Democratic_Republic_of_the_Congo",
+            "Egypt", "Eswatini", "Ethiopia", "Kenya", "Libya", "Morocco",
+            "Nigeria", "South_Africa", "Tunisia")
 
 ## 5  Plot timeline
 
