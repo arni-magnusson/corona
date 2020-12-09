@@ -1,6 +1,8 @@
 library(arni)     # sort.data.frame
 library(lattice)  # xyplot
 
+source("utilities.R")
+
 ## 1  Fetch data
 
 ecdc <- read.csv("https://opendata.ecdc.europa.eu/covid19/casedistribution/csv")
@@ -39,21 +41,15 @@ africa <- c("Algeria", "Cape_Verde", "Congo", "Egypt", "Eswatini", "Ethiopia",
 
 pars <- list(axis.text=list(cex=0.7), par.xlab.text=list(cex=0.7),
              par.ylab.text=list(cex=0.7), plot.line=list(lwd=2))
-plotTime <- function(x, main="", ...)
-{
-  print(xyplot(TwoWeeks~Date|Ordered, timeline, subset=Country %in% x, type="l",
-               ylim=c(0, NA), as.table=TRUE, par.settings=pars,
-               par.strip.text=list(cex=0.7), main=main, ylab="Index", ...))
-}
 
 pdf("ecdc_timeline.pdf")
-plotTime(world, "World", layout=c(3,5))
-plotTime(europe, "Europe", layout=c(3,5))
-plotTime(europe, "Europe", layout=c(3,5), scales=list(relation="free"))
-plotTime(nordic, "Nordic", layout=c(2,3))
-plotTime(america, "America", layout=c(3,5))
-plotTime(asia, "Asia", layout=c(3,4))
-plotTime(africa, "Africa", layout=c(3,4))
+plotTimeLattice(world, "World", layout=c(3,5))
+plotTimeLattice(europe, "Europe", layout=c(3,5))
+plotTimeLattice(europe, "Europe", layout=c(3,5), scales=list(relation="free"))
+plotTimeLattice(nordic, "Nordic", layout=c(2,3))
+plotTimeLattice(america, "America", layout=c(3,5))
+plotTimeLattice(asia, "Asia", layout=c(3,4))
+plotTimeLattice(africa, "Africa", layout=c(3,4))
 dev.off()
 
 ## 6  Plot current levels

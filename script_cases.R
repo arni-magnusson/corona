@@ -147,22 +147,22 @@ legend("bottomright", c("Europe","USA"), lwd=c(3,4), lty=c(1,3), col=c(2,4),
 ## Daily cases by country
 oplt <- par("plt")
 par(mfrow=c(3,3))
-out <- lapply(split(timeline.worst, timeline.worst$Country), plotTimeline,
+out <- lapply(split(timeline.worst, timeline.worst$Country), plotTimeBase,
               span=0.30)
 par(mfrow=c(3,3))
-out <- lapply(split(timeline.nordic, timeline.nordic$Country), plotTimeline,
+out <- lapply(split(timeline.nordic, timeline.nordic$Country), plotTimeBase,
               span=0.25)
 par(mfrow=c(3,3))
-out <- lapply(split(timeline.latin, timeline.latin$Country), plotTimeline,
+out <- lapply(split(timeline.latin, timeline.latin$Country), plotTimeBase,
               span=0.35)
 par(mfrow=c(3,3))
-out <- lapply(split(timeline.europe, timeline.europe$Country), plotTimeline,
+out <- lapply(split(timeline.europe, timeline.europe$Country), plotTimeBase,
               span=0.35)
 par(mfrow=c(3,3))
-out <- lapply(split(timeline.asia, timeline.asia$Country), plotTimeline,
+out <- lapply(split(timeline.asia, timeline.asia$Country), plotTimeBase,
               span=0.30)
 par(mfrow=c(3,3))
-out <- lapply(split(timeline.africa, timeline.africa$Country), plotTimeline,
+out <- lapply(split(timeline.africa, timeline.africa$Country), plotTimeBase,
               span=0.30)
 
 ## Cases worldwide
