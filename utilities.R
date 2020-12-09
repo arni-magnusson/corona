@@ -1,6 +1,12 @@
 library(lattice)   # xyplot
 library(reshape2)  # melt
 
+barCurrent <- function(x, main="", ...)
+{
+  barplot(x$TwoWeeks, names=x$Country, horiz=TRUE, las=1, main=main,
+          xlab="Current index", ...)
+}
+
 doubling.time <- function(country, column, data=timeline)
 {
   x <- data[data$Country==country,]
@@ -20,14 +26,17 @@ plotTimeBase <- function(data, start="2020-03-01", ylim=NULL, lwd=3, col.line=4,
   if(points)
     points(data$Date, data$Daily, col=col.points)
   lines(data$Date, fit, lwd=lwd, col=col.line)
-  text(as.Date(start)+2, 0.9*par("usr")[4], data$Country[1], adj=0, cex=cex.label)
+  text(as.Date(start)+2, 0.9*par("usr")[4], data$Country[1], adj=0,
+       cex=cex.label)
   par(opar)
 }
 
-plotTimeLattice <- function(x, main="", ...)
+plotTimeLattice <- function(countries, main="", data=timeline, ...)
 {
-  print(xyplot(TwoWeeks~Date|Ordered, timeline, subset=Country %in% x, type="l",
-               ylim=c(0, NA), as.table=TRUE, par.settings=pars,
+  pars <- list(axis.text=list(cex=0.7), par.xlab.text=list(cex=0.7),
+               par.ylab.text=list(cex=0.7), plot.line=list(lwd=2))
+  print(xyplot(TwoWeeks~Date|Ordered, data, subset=Country %in% countries,
+               type="l", ylim=c(0, NA), as.table=TRUE, par.settings=pars,
                par.strip.text=list(cex=0.7), main=main, ylab="Index", ...))
 }
 
