@@ -1,3 +1,4 @@
+library(lattice)   # xyplot
 library(reshape2)  # melt
 
 doubling.time <- function(country, column, data=timeline)
