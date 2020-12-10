@@ -2,7 +2,8 @@
 
 ## Before: time_series_covid19_confirmed_global.csv,
 ##         UID_ISO_FIPS_LookUp_Table.csv (bootstrap/jh)
-## After:  current.csv, doubling.csv, rate.csv, timeline.csv (data)
+## After:  jh_cases_current.csv, jh_cases_doubling.csv, jh_cases_rate.csv,
+##         jh_cases_timeline.csv (data)
 
 library(icesTAF)
 suppressPackageStartupMessages(library(gplots))  # rich.colors

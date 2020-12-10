@@ -2,7 +2,8 @@
 
 ## Before: time_series_covid19_deaths_global.csv,
 ##         UID_ISO_FIPS_LookUp_Table.csv (bootstrap/jh)
-## After:  current.csv, doubling.csv, rate.csv, timeline.csv (data)
+## After:  jh_deaths_current.csv, jh_deaths_doubling.csv, jh_deaths_rate.csv,
+##         jh_deaths_timeline.csv (data)
 
 library(icesTAF)
 suppressPackageStartupMessages(library(gplots))  # rich.colors
@@ -37,7 +38,7 @@ current$Rate <- round(current$Deaths / current$Population * 1e6, 1)
 current$Doubling <- sapply(current$Country, doubling.time, column="Deaths")
 
 rate <- current[current$Population>=1e5,]
-rate <- tail(current[order(current$Rate),], 25)
+rate <- tail(rate[order(rate$Rate),], 25)
 
 doubling <- current[current$Deaths>=100,]
 doubling <- current[order(current$Doubling),]
