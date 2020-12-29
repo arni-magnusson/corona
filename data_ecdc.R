@@ -14,7 +14,8 @@ ecdc <- read.taf("bootstrap/data/ecdc/data.csv")
 ecdc.timeline <- data.frame(Date=as.Date(ecdc$date, format="%d/%m/%Y"),
                             Country=ecdc$countries, Continent=ecdc$continent,
                             Population=ecdc$pop, Cases=ecdc$cases,
-                            Deaths=ecdc$deaths, TwoWeeks=ecdc$Cumulative)
+                            Deaths=ecdc$deaths,
+                            TwoWeeks=ecdc$"notification_rate_per_100000_population_14-days")
 
 ## Write tables
 write.taf(ecdc.timeline, dir="data", quote=TRUE)
