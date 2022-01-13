@@ -50,13 +50,13 @@ plotXY <- function(data, ylab="", ...)
 
 rearrange <- function(x, colname="Count")
 {
-  x <- x[-c(1,3,4)]
+  x <- x[!(names(x) %in% c("Province/State", "Lat", "Long"))]
   names(x)[1] <- "Country"
   x <- melt(x, "Country")
   names(x) <- c("Country", "Date", "Value")
   x$Date <- as.Date(x$Date, "%m/%d/%y")
   x <- aggregate(Value~Country+Date, x, sum)
-  x <- x[order(x[1],x[2]),]
+  x <- x[order(x$Country,x$Date),]
   row.names(x) <- NULL
   names(x) <- c("Country", "Date", colname)
   x
