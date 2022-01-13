@@ -33,8 +33,8 @@ deaths <- deaths[deaths$Deaths>0,]
 current <- merge(pop, deaths)
 current <- na.omit(current)
 
-## Rate (deaths per million) and doubling time
-current$Rate <- round(current$Deaths / current$Population * 1e6, 1)
+## Rate (deaths per 1000) and doubling time
+current$Rate <- round(current$Deaths / current$Population * 1e3, 1)
 current$Doubling <- sapply(current$Country, doubling.time, column="Deaths")
 
 rate <- current[current$Population>=1e5,]

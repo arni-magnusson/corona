@@ -49,7 +49,7 @@ timeline.africa <- timeline[timeline$Country %in% africa,]
 pdf("report/jh_deaths_current.pdf")
 opar <- par(plt=c(0.30, 0.94, 0.15, 0.88))
 barplot(rate$Rate, names=rate$Country, horiz=TRUE, las=1, col=NA, border=FALSE,
-        xlab="Deaths per million inhabitants")
+        xlab="Deaths per 1000 inhabitants")
 grid(nx=NULL, ny=NA, lty=1, lwd=1)
 barplot(rate$Rate, horiz=TRUE, axes=FALSE, col=rate$Color, add=TRUE)
 par(opar)
@@ -63,7 +63,7 @@ barplot(doubling$Doubling, horiz=TRUE, axes=FALSE, col=doubling$Color, add=TRUE)
 par(opar)
 
 ## Current scatterplots
-ylab <- "Deaths per million"
+ylab <- "Deaths per 1000"
 plotXY(current.worst,  ylab=ylab, main="Worst hit")
 plotXY(current.nordic, ylab=ylab, main="Nordic countries")
 plotXY(current.latin,  ylab=ylab, main="Latin America")
