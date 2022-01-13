@@ -1,6 +1,6 @@
 ## Prepare plots and tables for report
 
-library(icesTAF)
+library(TAF)
 
 mkdir("report")
 

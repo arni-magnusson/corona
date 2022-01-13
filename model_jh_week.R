@@ -3,7 +3,7 @@
 ## Before: jh_deaths_current.csv, jh_deaths_timeline.csv (data)
 ## After:  jh_week.csv, jh_week_full.csv (model)
 
-library(icesTAF)
+library(TAF)
 
 mkdir("model")
 

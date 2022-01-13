@@ -3,7 +3,7 @@
 ## Before: jh_deaths_timeline.csv (data), jh_week.csv, jh_week_full.csv (output)
 ## After:  jh_deaths_current.pdf, jh_deaths_timeline.pdf, jh_week.pdf (report)
 
-library(icesTAF)
+library(TAF)
 
 mkdir("report")
 

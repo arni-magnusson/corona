@@ -5,7 +5,7 @@
 ## After:  jh_cases_current.csv, jh_cases_doubling.csv, jh_cases_rate.csv,
 ##         jh_cases_timeline.csv (data)
 
-library(icesTAF)
+library(TAF)
 suppressPackageStartupMessages(library(gplots))  # rich.colors
 source("utilities.R")                            # doubling.time, rearrange
 

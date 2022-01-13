@@ -4,7 +4,7 @@
 ## After:  jh_euro5.csv, jh_nordic.csv, jh_latin.csv, jh_europe.csv,
 ##         jh_asia.csv, jh_africa.csv (model)
 
-library(icesTAF)
+library(TAF)
 
 mkdir("model")
 

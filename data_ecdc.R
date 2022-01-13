@@ -3,7 +3,7 @@
 ## Before: data.csv (bootstrap/ecdc)
 ## After:  ecdc_population.csv, ecdc_timeline.csv (data)
 
-library(icesTAF)
+library(TAF)
 
 mkdir("data")
 

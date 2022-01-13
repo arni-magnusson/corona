@@ -1,6 +1,6 @@
 ## Run analysis, write model results
 
-library(icesTAF)
+library(TAF)
 
 mkdir("model")
 

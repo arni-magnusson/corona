@@ -4,7 +4,7 @@
 ##         jh_cases_timeline.csv (data), jh_countries.RData (output)
 ## After:  jh_cases_current.pdf, jh_cases_timeline.pdf (report)
 
-library(icesTAF)
+library(TAF)
 source("utilities.R")  # plotTimeBase, plotXY
 
 mkdir("report")
@@ -63,7 +63,7 @@ barplot(doubling$Doubling, horiz=TRUE, axes=FALSE, col=doubling$Color, add=TRUE)
 par(opar)
 
 ## Current scatterplots
-ylab <- "Cases per million"
+ylab <- "Total cases in population (%)"
 plotXY(current.worst,  ylab=ylab, main="Worst hit")
 plotXY(current.nordic, ylab=ylab, main="Nordic countries")
 plotXY(current.latin,  ylab=ylab, main="Latin America")

@@ -5,7 +5,7 @@
 ##         ecdc_current_asia.csv, ecdc_current_europe.csv,
 ##         ecdc_current_nordic.csv, ecdc_current_worst.csv (model)
 
-library(icesTAF)
+library(TAF)
 
 mkdir("model")
 

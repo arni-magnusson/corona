@@ -3,7 +3,7 @@
 ## Before: *.csv (model)
 ## After:  *.csv (output)
 
-library(icesTAF)
+library(TAF)
 
 mkdir("output")
 

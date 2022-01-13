@@ -4,7 +4,7 @@
 ##         ecdc_countries.RData (output)
 ## After:  ecdc_current.pdf, ecdc_timeline.pdf (report)
 
-library(icesTAF)
+library(TAF)
 source("utilities.R")  # barCurrent, plotTimeLattice
 
 mkdir("report")
