@@ -1,7 +1,7 @@
 ## Preprocess Johns Hopkins deaths, write TAF data tables
 
 ## Before: time_series_covid19_deaths_global.csv,
-##         UID_ISO_FIPS_LookUp_Table.csv (bootstrap/jh)
+##         UID_ISO_FIPS_LookUp_Table.csv (bootstrap/data)
 ## After:  jh_deaths_current.csv, jh_deaths_doubling.csv, jh_deaths_rate.csv,
 ##         jh_deaths_timeline.csv (data)
 
@@ -12,9 +12,9 @@ source("utilities.R")                            # doubling.time, rearrange
 mkdir("data")
 
 ## Read data
-deaths.global <- read.taf(file.path("bootstrap/data/jh",
-                                    "time_series_covid19_deaths_global.csv"))
-lookup <- read.taf("bootstrap/data/jh/UID_ISO_FIPS_LookUp_Table.csv")
+deaths.global <-
+  read.taf("bootstrap/data/time_series_covid19_deaths_global.csv")
+lookup <- read.taf("bootstrap/data/UID_ISO_FIPS_LookUp_Table.csv")
 
 ## Population
 pop <- lookup[lookup$Province_State=="", c("Country_Region","Population")]
