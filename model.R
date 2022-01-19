@@ -4,5 +4,5 @@ library(TAF)
 
 mkdir("model")
 
-sourceTAF("model_jh.R")
-sourceTAF("model_jh_week.R")
+sourceTAF("model_countries.R")
+sourceTAF("model_week.R")

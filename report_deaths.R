@@ -1,8 +1,8 @@
-## Prepare plots and tables for Johns Hopkins deaths
+## Prepare plots and tables for deaths
 
-## Before: jh_deaths_current.csv, jh_deaths_doubling.csv, jh_deaths_rate.csv,
-##         jh_deaths_timeline.csv (data), jh_countries.RData (output)
-## After:  jh_deaths_current.pdf, jh_deaths_timeline.pdf (report)
+## Before: deaths_current.csv, deaths_doubling.csv, deaths_rate.csv,
+##         deaths_timeline.csv (data), countries.RData (output)
+## After:  deaths_current.pdf, deaths_timeline.pdf (report)
 
 library(TAF)
 source("utilities.R")  # plotTimeBase, plotXY
@@ -10,11 +10,11 @@ source("utilities.R")  # plotTimeBase, plotXY
 mkdir("report")
 
 ## Read data
-current <- read.taf("data/jh_deaths_current.csv")
-doubling <- read.taf("data/jh_deaths_doubling.csv")
-rate <- read.taf("data/jh_deaths_rate.csv")
-timeline <- read.taf("data/jh_deaths_timeline.csv")
-load("output/jh_countries.RData")  # africa, asia, euro5, europe, latin, nordic
+current <- read.taf("data/deaths_current.csv")
+doubling <- read.taf("data/deaths_doubling.csv")
+rate <- read.taf("data/deaths_rate.csv")
+timeline <- read.taf("data/deaths_timeline.csv")
+load("output/countries.RData")  # africa, asia, euro5, europe, latin, nordic
 timeline$Date <- as.Date(timeline$Date)
 current$Rate <- current$Rate / 1000  # plot per million
 rate$Rate <- rate$Rate / 1000  # plot per million
@@ -47,7 +47,7 @@ timeline.asia <- timeline[timeline$Country %in% asia,]
 timeline.africa <- timeline[timeline$Country %in% africa,]
 
 ## Current worst deaths
-pdf("report/jh_deaths_current.pdf")
+pdf("report/deaths_current.pdf")
 opar <- par(plt=c(0.30, 0.94, 0.15, 0.88))
 barplot(rate$Rate, names=rate$Country, horiz=TRUE, las=1, col=NA, border=FALSE,
         xlab="Deaths per 1000 inhabitants")
@@ -74,7 +74,7 @@ plotXY(current.africa, ylab=ylab, main="Africa")
 dev.off()
 
 ## Timeline trajectories
-pdf("report/jh_deaths_timeline.pdf")
+pdf("report/deaths_timeline.pdf")
 split.worst <- split(timeline.worst, timeline.worst$Country)
 plot(NA, xaxt="n", xlab="Date", ylab="log10(Deaths)",
      xlim=range(timeline.worst$Date), ylim=lim(log10(timeline.worst$Deaths)))

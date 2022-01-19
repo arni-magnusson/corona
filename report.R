@@ -4,6 +4,6 @@ library(TAF)
 
 mkdir("report")
 
-sourceTAF("report_jh_cases.R")
-sourceTAF("report_jh_deaths.R")
-sourceTAF("report_jh_week.R")
+sourceTAF("report_cases.R")
+sourceTAF("report_deaths.R")
+sourceTAF("report_week.R")

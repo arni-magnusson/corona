@@ -1,17 +1,17 @@
-## Prepare plots and tables for Johns Hopkins week
+## Prepare plots and tables for week
 
-## Before: jh_deaths_timeline.csv (data), jh_week.csv, jh_week_full.csv (output)
-## After:  jh_deaths_current.pdf, jh_deaths_timeline.pdf, jh_week.pdf (report)
+## Before: deaths_timeline.csv (data), week.csv, week_full.csv (output)
+## After:  deaths_current.pdf, deaths_timeline.pdf, week.pdf (report)
 
 library(TAF)
 
 mkdir("report")
 
 ## Read data
-timeline <- read.taf("data/jh_deaths_timeline.csv")
+timeline <- read.taf("data/deaths_timeline.csv")
 timeline$Date <- as.Date(timeline$Date)
-week <- read.taf("output/jh_week.csv")
-week.full <- read.taf("output/jh_week_full.csv")
+week <- read.taf("output/week.csv")
+week.full <- read.taf("output/week_full.csv")
 
 ## Prepare label
 dates <- sort(unique(timeline$Date[timeline$Date>max(timeline$Date)-7]))
@@ -19,7 +19,7 @@ main.week <- paste0("Last week ", "(",
                     paste(range(dates), collapse=" to "), ")")
 
 ## Death rate last week
-pdf("report/jh_week.pdf")
+pdf("report/week.pdf")
 opar <- par(plt=c(0.34, 0.94, 0.15, 0.88))
 barplot(week$WeekRate, names=week$Country, horiz=TRUE, las=1, col=NA,
         border=FALSE, main=main.week, xlab="Deaths per million inhabitants")

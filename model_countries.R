@@ -1,8 +1,7 @@
-## Run Johns Hopkins analysis, write model results
+## Define sets of countries, write model results
 
 ## Before: (nothing)
-## After:  jh_euro5.csv, jh_nordic.csv, jh_latin.csv, jh_europe.csv,
-##         jh_asia.csv, jh_africa.csv (model)
+## After:  countries.RData (model)
 
 library(TAF)
 
@@ -22,4 +21,4 @@ africa <- c("Algeria", "Congo (Kinshasa)", "Eswatini", "Ethiopia", "Kenya",
 
 ## Save sets
 save("euro5", "nordic", "latin", "europe", "asia", "africa",
-     file="model/jh_countries.RData")
+     file="model/countries.RData")

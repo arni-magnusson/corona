@@ -1,8 +1,8 @@
-## Prepare plots and tables for Johns Hopkins cases
+## Prepare plots and tables for cases
 
-## Before: jh_cases_current.csv, jh_cases_doubling.csv, jh_cases_rate.csv,
-##         jh_cases_timeline.csv (data), jh_countries.RData (output)
-## After:  jh_cases_current.pdf, jh_cases_timeline.pdf (report)
+## Before: cases_current.csv, cases_doubling.csv, cases_rate.csv,
+##         cases_timeline.csv (data), countries.RData (output)
+## After:  cases_current.pdf, cases_timeline.pdf (report)
 
 library(TAF)
 source("utilities.R")  # plotTimeBase, plotXY
@@ -10,11 +10,11 @@ source("utilities.R")  # plotTimeBase, plotXY
 mkdir("report")
 
 ## Read data
-current <- read.taf("data/jh_cases_current.csv")
-doubling <- read.taf("data/jh_cases_doubling.csv")
-rate <- read.taf("data/jh_cases_rate.csv")
-timeline <- read.taf("data/jh_cases_timeline.csv")
-load("output/jh_countries.RData")  # africa, asia, euro5, europe, latin, nordic
+current <- read.taf("data/cases_current.csv")
+doubling <- read.taf("data/cases_doubling.csv")
+rate <- read.taf("data/cases_rate.csv")
+timeline <- read.taf("data/cases_timeline.csv")
+load("output/countries.RData")  # africa, asia, euro5, europe, latin, nordic
 timeline$Date <- as.Date(timeline$Date)
 
 ## World
@@ -46,7 +46,7 @@ timeline.africa <- timeline[timeline$Country %in% africa,]
 
 
 ## Current worst cases
-pdf("report/jh_cases_current.pdf")
+pdf("report/cases_current.pdf")
 opar <- par(plt=c(0.30, 0.94, 0.15, 0.88))
 barplot(rate$Rate, names=rate$Country, horiz=TRUE, las=1, col=NA, border=FALSE,
         xlab="Total cases in population (%)")
@@ -73,7 +73,7 @@ plotXY(current.africa, ylab=ylab, main="Africa")
 dev.off()
 
 ## Timeline trajectories
-pdf("report/jh_cases_timeline.pdf")
+pdf("report/cases_timeline.pdf")
 split.worst <- split(timeline.worst, timeline.worst$Country)
 plot(NA, xaxt="n", xlab="Date", ylab="log10(Cases)",
      xlim=range(timeline.worst$Date), ylim=lim(log10(timeline.worst$Cases)))

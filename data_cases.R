@@ -1,9 +1,9 @@
-## Preprocess Johns Hopkins cases, write TAF data tables
+## Preprocess cases, write TAF data tables
 
 ## Before: time_series_covid19_confirmed_global.csv,
 ##         UID_ISO_FIPS_LookUp_Table.csv (bootstrap/data)
-## After:  jh_cases_current.csv, jh_cases_doubling.csv, jh_cases_rate.csv,
-##         jh_cases_timeline.csv (data)
+## After:  cases_current.csv, cases_doubling.csv, cases_rate.csv,
+##         cases_timeline.csv (data)
 
 library(TAF)
 suppressPackageStartupMessages(library(gplots))  # rich.colors
@@ -53,7 +53,7 @@ doubling$Color <- rev(rich.colors(max(doubling$Rank), "blues"))[doubling$Rank]
 doubling <- doubling[order(-doubling$Doubling,doubling$Rank),]
 
 ## Write tables
-write.taf(current, "data/jh_cases_current.csv", quote=TRUE)    # all countries
-write.taf(doubling, "data/jh_cases_doubling.csv", quote=TRUE)  # lowest doubling
-write.taf(rate, "data/jh_cases_rate.csv", quote=TRUE)          # highest rate
-write.taf(timeline, "data/jh_cases_timeline.csv", quote=TRUE)  # timeline
+write.taf(current, "data/cases_current.csv", quote=TRUE)    # all countries
+write.taf(doubling, "data/cases_doubling.csv", quote=TRUE)  # lowest doubling
+write.taf(rate, "data/cases_rate.csv", quote=TRUE)          # highest rate
+write.taf(timeline, "data/cases_timeline.csv", quote=TRUE)  # timeline

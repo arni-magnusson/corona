@@ -1,15 +1,15 @@
-## Run Johns Hopkins week analysis, write model results
+## Run analysis of last week, write model results
 
-## Before: jh_deaths_current.csv, jh_deaths_timeline.csv (data)
-## After:  jh_week.csv, jh_week_full.csv (model)
+## Before: deaths_current.csv, deaths_timeline.csv (data)
+## After:  week.csv, week_full.csv (model)
 
 library(TAF)
 
 mkdir("model")
 
 ## Read data
-current <- read.taf("data/jh_deaths_current.csv")
-timeline <- read.taf("data/jh_deaths_timeline.csv")
+current <- read.taf("data/deaths_current.csv")
+timeline <- read.taf("data/deaths_timeline.csv")
 timeline$Date <- as.Date(timeline$Date)
 
 ## Find last seven days
@@ -29,5 +29,5 @@ week <- week[week$Population>=1e5,]
 week <- tail(week[order(week$WeekRate),], 25)
 
 ## Write tables
-write.taf(week, "model/jh_week.csv", quote=TRUE)
-write.taf(week.full, "model/jh_week_full.csv", quote=TRUE)
+write.taf(week, "model/week.csv", quote=TRUE)
+write.taf(week.full, "model/week_full.csv", quote=TRUE)
