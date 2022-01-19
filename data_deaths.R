@@ -32,7 +32,6 @@ timeline <- timeline[timeline$Country %in% countries,]  # actual countries
 
 ## Current
 deaths <- aggregate(Deaths~Country, timeline, tail, 1)
-deaths <- deaths[deaths$Deaths>0,]
 current <- merge(pop, deaths)
 current <- na.omit(current)
 
