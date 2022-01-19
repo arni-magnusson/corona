@@ -14,7 +14,8 @@ current <- read.taf("data/deaths_current.csv")
 doubling <- read.taf("data/deaths_doubling.csv")
 rate <- read.taf("data/deaths_rate.csv")
 timeline <- read.taf("data/deaths_timeline.csv")
-load("output/countries.RData")  # africa, asia, euro5, europe, latin, nordic
+## Country sets: africa, asia, e.europe, euro5, latin, nordic, spc, w.europe
+load("output/countries.RData")
 timeline$Date <- as.Date(timeline$Date)
 current$Rate <- current$Rate / 1000  # plot per million
 rate$Rate <- rate$Rate / 1000  # plot per million
@@ -34,17 +35,21 @@ onset.us <- min(us$Date[us$Deaths>=100])
 current.worst <- current[current$Country %in% worst,]
 current.nordic <- current[current$Country %in% nordic,]
 current.latin <- current[current$Country %in% latin,]
-current.europe <- current[current$Country %in% europe,]
+current.w.europe <- current[current$Country %in% w.europe,]
+current.e.europe <- current[current$Country %in% e.europe,]
 current.asia <- current[current$Country %in% asia,]
 current.africa <- current[current$Country %in% africa,]
+current.spc <- current[current$Country %in% spc,]
 
 ## Timeline
 timeline.worst <- timeline[timeline$Country %in% worst,]
 timeline.nordic <- timeline[timeline$Country %in% nordic,]
 timeline.latin <- timeline[timeline$Country %in% latin,]
-timeline.europe <- timeline[timeline$Country %in% europe,]
+timeline.w.europe <- timeline[timeline$Country %in% w.europe,]
+timeline.e.europe <- timeline[timeline$Country %in% e.europe,]
 timeline.asia <- timeline[timeline$Country %in% asia,]
 timeline.africa <- timeline[timeline$Country %in% africa,]
+timeline.spc <- timeline[timeline$Country %in% spc,]
 
 ## Current worst deaths
 pdf("report/deaths_current.pdf")
@@ -68,9 +73,11 @@ ylab <- "Deaths per 1000"
 plotXY(current.worst,  ylab=ylab, main="Worst hit")
 plotXY(current.nordic, ylab=ylab, main="Nordic countries")
 plotXY(current.latin,  ylab=ylab, main="Latin America")
-plotXY(current.europe, ylab=ylab, main="Europe")
+plotXY(current.w.europe, ylab=ylab, main="Western Europe")
+plotXY(current.e.europe, ylab=ylab, main="Eastern Europe")
 plotXY(current.asia,   ylab=ylab, main="Asia")
 plotXY(current.africa, ylab=ylab, main="Africa")
+plotXY(current.spc, ylab=ylab, main="Pacific Islands")
 dev.off()
 
 ## Timeline trajectories
@@ -118,13 +125,19 @@ par(mfrow=c(3,3))
 out <- lapply(split(timeline.latin, timeline.latin$Country), plotTimeBase,
               span=0.35)
 par(mfrow=c(3,3))
-out <- lapply(split(timeline.europe, timeline.europe$Country), plotTimeBase,
+out <- lapply(split(timeline.w.europe, timeline.w.europe$Country), plotTimeBase,
+              span=0.35)
+par(mfrow=c(3,3))
+out <- lapply(split(timeline.e.europe, timeline.e.europe$Country), plotTimeBase,
               span=0.35)
 par(mfrow=c(3,3))
 out <- lapply(split(timeline.asia, timeline.asia$Country), plotTimeBase,
               span=0.30)
 par(mfrow=c(3,3))
 out <- lapply(split(timeline.africa, timeline.africa$Country), plotTimeBase,
+              span=0.30)
+par(mfrow=c(3,4))
+out <- lapply(split(timeline.spc, timeline.spc$Country), plotTimeBase,
               span=0.30)
 
 ## Timeline deaths worldwide
@@ -134,6 +147,6 @@ plot(log10(Deaths)~Date, world, main="Total deaths worldwide")
 
 plot(Daily~Date, world, main="Daily deaths worldwide",
      ylab="Deaths")
-lines(world$Date, fitted(loess(Daily~as.integer(Date), world, span=0.30)),
+lines(world$Date, fitted(loess(Daily~as.integer(Date), world, span=0.10)),
       lwd=2, col="darkgreen")
 dev.off()

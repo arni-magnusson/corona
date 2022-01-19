@@ -12,13 +12,17 @@ euro5 <- c("Germany", "United Kingdom", "France", "Italy", "Spain")
 nordic <- c("Sweden", "Denmark", "Finland", "Norway", "Iceland")
 latin <- c("Argentina", "Bolivia", "Brazil", "Chile", "Colombia", "Ecuador",
            "Mexico", "Panama", "Peru")
-europe <- c("Belgium", "France", "Germany", "Italy", "Netherlands", "Portugal",
-            "Spain", "Switzerland", "United Kingdom")
-asia <- c("China", "Japan", "Indonesia", "India", "Pakistan", "Bangladesh",
-          "Iran", "Russia", "Turkey")
-africa <- c("Algeria", "Congo (Kinshasa)", "Eswatini", "Ethiopia", "Kenya",
-            "Morocco", "Nigeria", "South Africa", "Sudan")
+w.europe <- c("Belgium", "France", "Germany", "Italy", "Netherlands",
+              "Portugal", "Spain", "Switzerland", "United Kingdom")
+e.europe <- c("Russia", "Turkey", "Poland", "Romania", "Czechia", "Greece",
+              "Hungary", "Ukraine", "Bulgaria")
+asia <- c("China", "Japan", "India", "South Korea", "Indonesia", "Saudi Arabia",
+          "Iran", "Pakistan", "Bangladesh")
+africa <- c("Nigeria", "Egypt", "South Africa", "Algeria", "Morocco", "Kenya",
+            "Ethiopia", "Congo (Kinshasa)", "Tanzania")
+spc <- c("Papua New Guinea", "Fiji", "Solomon Islands", "Vanuatu", "Samoa",
+         "Kiribati", "Micronesia", "Tonga", "Marshall Islands", "Palau")
 
 ## Save sets
-save("euro5", "nordic", "latin", "europe", "asia", "africa",
-     file="model/countries.RData")
+save("euro5", "nordic", "latin", "w.europe", "e.europe", "asia", "africa",
+     "spc", file="model/countries.RData")
