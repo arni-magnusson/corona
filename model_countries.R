@@ -8,7 +8,7 @@ library(TAF)
 mkdir("model")
 
 ## Sets of countries
-euro5 <- c("Germany", "UK", "France", "Italy", "Spain")
+euro5 <- c("Germany", "United Kingdom", "France", "Italy", "Spain")
 nordic <- c("Sweden", "Denmark", "Finland", "Norway", "Iceland")
 latin <- c("Argentina", "Bolivia", "Brazil", "Chile", "Colombia", "Ecuador",
            "Mexico", "Panama", "Peru")
