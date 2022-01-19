@@ -19,12 +19,15 @@ lookup <- read.taf("bootstrap/data/UID_ISO_FIPS_LookUp_Table.csv")
 ## Population
 pop <- lookup[lookup$Province_State=="", c("Country_Region","Population")]
 names(pop)[names(pop)=="Country_Region"] <- "Country"
+## Omit Summer Olympics 2020, MS Zaandam, Diamond Princess
+countries <- pop$Country[!is.na(pop$Population)]
 
 ## Reshape and calculate daily statistics
 timeline <- rearrange(cases.global, "Cases")
 timeline$Daily <- c(timeline$Cases[1], diff(timeline$Cases))
 timeline$Daily[timeline$Date == min(timeline$Date)] <-
   timeline$Cases[timeline$Date == min(timeline$Date)]
+timeline <- timeline[timeline$Country %in% countries,]  # actual countries
 
 ## Current
 cases <- aggregate(Cases~Country, timeline, tail, 1)
