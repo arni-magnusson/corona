@@ -22,13 +22,13 @@ main.week <- paste0("Last week ", "(",
 pdf("report/jh_week.pdf")
 opar <- par(plt=c(0.34, 0.94, 0.15, 0.88))
 barplot(week$WeekRate, names=week$Country, horiz=TRUE, las=1, col=NA,
-        border=FALSE, main=main.week, xlab="Deaths per 1000 inhabitants")
+        border=FALSE, main=main.week, xlab="Deaths per million inhabitants")
 grid(nx=NULL, ny=NA, lty=1, lwd=1)
 barplot(week$WeekRate, horiz=TRUE, axes=FALSE, col="brown", add=TRUE)
 
 ## Death rate last week and before
 barplot(week$Rate, names=week$Country, horiz=TRUE, las=1, col=NA, border=FALSE,
-        main=main.week, xlab="Deaths per 1000 inhabitants")
+        main=main.week, xlab="Deaths per million inhabitants")
 grid(nx=NULL, ny=NA, lty=1, lwd=1)
 barplot(t(week[c("WeekRate","PrevRate")]), horiz=TRUE, axes=FALSE,
         col=c("brown","gray95"), add=TRUE)

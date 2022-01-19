@@ -16,6 +16,8 @@ rate <- read.taf("data/jh_deaths_rate.csv")
 timeline <- read.taf("data/jh_deaths_timeline.csv")
 load("output/jh_countries.RData")  # africa, asia, euro5, europe, latin, nordic
 timeline$Date <- as.Date(timeline$Date)
+current$Rate <- current$Rate / 1000  # plot per million
+rate$Rate <- rate$Rate / 1000  # plot per million
 
 ## World
 world <- aggregate(cbind(Deaths,Daily)~Date, data=timeline, sum)
@@ -43,7 +45,6 @@ timeline.latin <- timeline[timeline$Country %in% latin,]
 timeline.europe <- timeline[timeline$Country %in% europe,]
 timeline.asia <- timeline[timeline$Country %in% asia,]
 timeline.africa <- timeline[timeline$Country %in% africa,]
-
 
 ## Current worst deaths
 pdf("report/jh_deaths_current.pdf")
