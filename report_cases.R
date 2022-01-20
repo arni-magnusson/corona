@@ -115,28 +115,28 @@ legend("bottomright", c("Europe","USA"), lwd=c(3,4), lty=c(1,3), col=c(2,4),
 oplt <- par("plt")
 par(mfrow=c(3,3))
 out <- lapply(split(timeline.worst, timeline.worst$Country), plotTimeBase,
-              span=0.30)
+              span=0.25)
 par(mfrow=c(3,3))
 out <- lapply(split(timeline.nordic, timeline.nordic$Country), plotTimeBase,
               span=0.25)
 par(mfrow=c(3,3))
 out <- lapply(split(timeline.latin, timeline.latin$Country), plotTimeBase,
-              span=0.35)
+              span=0.25)
 par(mfrow=c(3,3))
 out <- lapply(split(timeline.w.europe, timeline.w.europe$Country), plotTimeBase,
-              span=0.35)
+              span=0.25)
 par(mfrow=c(3,3))
 out <- lapply(split(timeline.e.europe, timeline.e.europe$Country), plotTimeBase,
-              span=0.35)
+              span=0.25)
 par(mfrow=c(3,3))
 out <- lapply(split(timeline.asia, timeline.asia$Country), plotTimeBase,
-              span=0.30)
+              span=0.25)
 par(mfrow=c(3,3))
 out <- lapply(split(timeline.africa, timeline.africa$Country), plotTimeBase,
-              span=0.30)
+              span=0.25)
 par(mfrow=c(4,3))
 out <- lapply(split(timeline.spc, timeline.spc$Country), plotTimeBase,
-              span=0.30)
+              span=0.25)
 
 ## Timeline cases worldwide
 par(mfrow=c(1,1))
