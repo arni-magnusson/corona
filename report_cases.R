@@ -81,10 +81,8 @@ dev.off()
 ## Timeline trajectories
 pdf("report/cases_timeline.pdf")
 split.worst <- split(timeline.worst, timeline.worst$Country)
-plot(NA, xaxt="n", xlab="Date", ylab="log10(Cases)",
-     xlim=range(timeline.worst$Date), ylim=lim(log10(timeline.worst$Cases)))
-axt <- pretty(timeline.worst$Date)
-axis(1, axt, format(axt, "1 %b"))
+plot(log10(Cases)~Date, timeline.worst, xlab="Date", ylab="log10(Cases)",
+     type="n")
 col <- c(palette(), "red")
 for(i in seq_along(split.worst))
   lines(log10(Cases)~Date, data=split.worst[[i]], lwd=2, col=col[i])
