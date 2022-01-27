@@ -14,7 +14,7 @@ current <- read.taf("data/cases_current.csv")
 doubling <- read.taf("data/cases_doubling.csv")
 rate <- read.taf("data/cases_rate.csv")
 timeline <- read.taf("data/cases_timeline.csv")
-## Country sets: africa, asia, e.europe, euro5, latin, nordic, spc, w.europe
+## Country sets: africa, asia, e.europe, euro5, latin, nordic, oceania, w.europe
 load("output/countries.RData")
 timeline$Date <- as.Date(timeline$Date)
 
@@ -37,7 +37,7 @@ current.w.europe <- current[current$Country %in% w.europe,]
 current.e.europe <- current[current$Country %in% e.europe,]
 current.asia <- current[current$Country %in% asia,]
 current.africa <- current[current$Country %in% africa,]
-current.spc <- current[current$Country %in% spc,]
+current.oceania <- current[current$Country %in% oceania,]
 
 ## Timeline
 timeline.worst <- timeline[timeline$Country %in% worst,]
@@ -47,7 +47,7 @@ timeline.w.europe <- timeline[timeline$Country %in% w.europe,]
 timeline.e.europe <- timeline[timeline$Country %in% e.europe,]
 timeline.asia <- timeline[timeline$Country %in% asia,]
 timeline.africa <- timeline[timeline$Country %in% africa,]
-timeline.spc <- timeline[timeline$Country %in% spc,]
+timeline.oceania <- timeline[timeline$Country %in% oceania,]
 
 ## Current worst cases
 pdf("report/cases_current.pdf")
@@ -75,7 +75,7 @@ plotXY(current.w.europe, ylab=ylab, main="Western Europe")
 plotXY(current.e.europe, ylab=ylab, main="Eastern Europe")
 plotXY(current.asia,   ylab=ylab, main="Asia")
 plotXY(current.africa, ylab=ylab, main="Africa")
-plotXY(current.spc, ylab=ylab, main="Pacific Islands")
+plotXY(current.oceania, ylab=ylab, main="Oceania")
 dev.off()
 
 ## Timeline trajectories
@@ -133,7 +133,7 @@ par(mfrow=c(3,3))
 out <- lapply(split(timeline.africa, timeline.africa$Country), plotTimeBase,
               span=0.25)
 par(mfrow=c(4,3))
-out <- lapply(split(timeline.spc, timeline.spc$Country), plotTimeBase,
+out <- lapply(split(timeline.oceania, timeline.oceania$Country), plotTimeBase,
               span=0.25)
 
 ## Timeline cases worldwide

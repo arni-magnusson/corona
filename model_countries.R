@@ -20,9 +20,10 @@ asia <- c("China", "Japan", "India", "South Korea", "Indonesia", "Saudi Arabia",
           "Iran", "Pakistan", "Bangladesh")
 africa <- c("Nigeria", "Egypt", "South Africa", "Algeria", "Morocco", "Kenya",
             "Ethiopia", "Congo (Kinshasa)", "Tanzania")
-spc <- c("Papua New Guinea", "Fiji", "Solomon Islands", "Vanuatu", "Samoa",
-         "Kiribati", "Micronesia", "Tonga", "Marshall Islands", "Palau")
+oceania <- c("Papua New Guinea", "Fiji", "Solomon Islands", "Vanuatu", "Samoa",
+             "Kiribati", "Micronesia", "Tonga", "Marshall Islands", "Palau",
+             "Australia", "New Zealand")
 
 ## Save sets
 save("euro5", "nordic", "latin", "w.europe", "e.europe", "asia", "africa",
-     "spc", file="model/countries.RData")
+     "oceania", file="model/countries.RData")
