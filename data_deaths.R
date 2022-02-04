@@ -2,8 +2,8 @@
 
 ## Before: continents.csv, time_series_covid19_deaths_global.csv,
 ##         UID_ISO_FIPS_LookUp_Table.csv (bootstrap/data)
-## After:  deaths_current.csv, deaths_current_continent.csv,
-##         deaths_doubling.csv, deaths_rate.csv, deaths_timeline.csv,
+## After:  deaths_total.csv, deaths_total_continent.csv, deaths_doubling.csv,
+##         deaths_rate.csv, deaths_timeline.csv,
 ##         deaths_timeline_continent.csv (data)
 
 library(TAF)
@@ -37,23 +37,23 @@ timeline$Daily[timeline$Date == min(timeline$Date)] <-
 timeline.c <- aggregate(cbind(Deaths,Daily)~Date+Continent, timeline, sum)
 timeline.c <- timeline.c[c("Continent", "Date", "Deaths", "Daily")]
 
-## Current
+## Total
 deaths <- aggregate(Deaths~Country, timeline, tail, 1)
-current <- merge(pop, deaths)
-current <- merge(current, continents)
-current <- na.omit(current)
-current.c <- aggregate(cbind(Population,Deaths)~Continent, current, sum)
+total <- merge(pop, deaths)
+total <- merge(total, continents)
+total <- na.omit(total)
+total.c <- aggregate(cbind(Population,Deaths)~Continent, total, sum)
 
 ## Rate (deaths per million) and doubling time
-current$Rate <- round(current$Deaths / current$Population * 1e6, 1)
-current$Doubling <- sapply(current$Country, doubling.time, column="Deaths")
-current.c$Rate <- round(current.c$Deaths / current.c$Population * 1e6, 1)
+total$Rate <- round(total$Deaths / total$Population * 1e6, 1)
+total$Doubling <- sapply(total$Country, doubling.time, column="Deaths")
+total.c$Rate <- round(total.c$Deaths / total.c$Population * 1e6, 1)
 
-rate <- current[current$Population>=1e5,]
+rate <- total[total$Population>=1e5,]
 rate <- tail(rate[order(rate$Rate),], 25)
 
-doubling <- current[current$Deaths>=100,]
-doubling <- current[order(current$Doubling),]
+doubling <- total[total$Deaths>=100,]
+doubling <- total[order(total$Doubling),]
 doubling <- doubling[doubling$Doubling<=doubling$Doubling[20],]
 
 ## Calculate rank and color
@@ -66,9 +66,9 @@ doubling$Color <- rev(rich.colors(max(doubling$Rank), "blues"))[doubling$Rank]
 doubling <- doubling[order(-doubling$Doubling,doubling$Rank),]
 
 ## Write tables
-write.taf(current, "data/deaths_current.csv", quote=TRUE)    # all countries
+write.taf(total, "data/deaths_total.csv", quote=TRUE)        # all countries
 write.taf(doubling, "data/deaths_doubling.csv", quote=TRUE)  # lowest doubling
 write.taf(rate, "data/deaths_rate.csv", quote=TRUE)          # highest rate
 write.taf(timeline, "data/deaths_timeline.csv", quote=TRUE)  # timeline
-write.taf(current.c, "data/deaths_current_continent.csv", quote=TRUE)
+write.taf(total.c, "data/deaths_total_continent.csv", quote=TRUE)
 write.taf(timeline.c, "data/deaths_timeline_continent.csv", quote=TRUE)

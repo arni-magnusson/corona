@@ -1,7 +1,7 @@
 ## Prepare plots and tables for week
 
 ## Before: deaths_timeline.csv (data), week.csv, week_full.csv (output)
-## After:  deaths_current.pdf, deaths_timeline.pdf, week.pdf (report)
+## After:  week.pdf (report)
 
 library(TAF)
 

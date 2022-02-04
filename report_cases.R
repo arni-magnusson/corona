@@ -1,8 +1,8 @@
 ## Prepare plots and tables for cases
 
-## Before: cases_current.csv, cases_doubling.csv, cases_rate.csv,
+## Before: cases_total.csv, cases_doubling.csv, cases_rate.csv,
 ##         cases_timeline.csv (data), countries.RData (output)
-## After:  cases_current.pdf, cases_timeline.pdf (report)
+## After:  cases_total.pdf, cases_timeline.pdf (report)
 
 library(TAF)
 source("utilities.R")  # plotTimeBase, plotXY
@@ -10,7 +10,7 @@ source("utilities.R")  # plotTimeBase, plotXY
 mkdir("report")
 
 ## Read data
-current <- read.taf("data/cases_current.csv")
+total <- read.taf("data/cases_total.csv")
 doubling <- read.taf("data/cases_doubling.csv")
 rate <- read.taf("data/cases_rate.csv")
 timeline <- read.taf("data/cases_timeline.csv")
@@ -30,16 +30,16 @@ onset.euro5 <- min(euro5$Date[euro5$Cases>=100])
 us <- timeline[timeline$Country=="US",]
 onset.us <- min(us$Date[us$Cases>=100])
 
-## Current
-current.worst <- current[current$Country %in% worst,]
-current.nordic <- current[current$Country %in% nordic,]
-current.w.europe <- current[current$Country %in% w.europe,]
-current.e.europe <- current[current$Country %in% e.europe,]
-current.n.america <- current[current$Country %in% n.america,]
-current.s.america <- current[current$Country %in% s.america,]
-current.asia <- current[current$Country %in% asia,]
-current.africa <- current[current$Country %in% africa,]
-current.oceania <- current[current$Country %in% oceania,]
+## Total
+total.worst <- total[total$Country %in% worst,]
+total.nordic <- total[total$Country %in% nordic,]
+total.w.europe <- total[total$Country %in% w.europe,]
+total.e.europe <- total[total$Country %in% e.europe,]
+total.n.america <- total[total$Country %in% n.america,]
+total.s.america <- total[total$Country %in% s.america,]
+total.asia <- total[total$Country %in% asia,]
+total.africa <- total[total$Country %in% africa,]
+total.oceania <- total[total$Country %in% oceania,]
 
 ## Timeline
 timeline.worst <- timeline[timeline$Country %in% worst,]
@@ -52,8 +52,8 @@ timeline.asia <- timeline[timeline$Country %in% asia,]
 timeline.africa <- timeline[timeline$Country %in% africa,]
 timeline.oceania <- timeline[timeline$Country %in% oceania,]
 
-## Current worst cases
-pdf("report/cases_current.pdf")
+## Total worst cases
+pdf("report/cases_total.pdf")
 opar <- par(plt=c(0.30, 0.94, 0.15, 0.88))
 barplot(rate$Rate, names=rate$Country, horiz=TRUE, las=1, col=NA, border=FALSE,
         xlab="Total cases in population (%)")
@@ -61,7 +61,7 @@ grid(nx=NULL, ny=NA, lty=1, lwd=1)
 barplot(rate$Rate, horiz=TRUE, axes=FALSE, col=rate$Color, add=TRUE)
 par(opar)
 
-## Current worst doubling time
+## Total worst doubling time
 par(plt=c(0.30, 0.94, 0.15, 0.88))
 barplot(doubling$Doubling, names=doubling$Country, horiz=TRUE, las=1, col=NA,
         border=FALSE, xlab="Doubling time of cases (days)")
@@ -69,17 +69,17 @@ grid(nx=NULL, ny=NA, lty=1, lwd=1)
 barplot(doubling$Doubling, horiz=TRUE, axes=FALSE, col=doubling$Color, add=TRUE)
 par(opar)
 
-## Current scatterplots
+## Total scatterplots
 ylab <- "Total cases in population (%)"
-plotXY(current.worst, ylab=ylab, main="Worst hit")
-plotXY(current.nordic, ylab=ylab, main="Nordic countries")
-plotXY(current.w.europe, ylab=ylab, main="Western Europe")
-plotXY(current.e.europe, ylab=ylab, main="Eastern Europe")
-plotXY(current.n.america, ylab=ylab, main="North America")
-plotXY(current.s.america, ylab=ylab, main="South America")
-plotXY(current.asia, ylab=ylab, main="Asia")
-plotXY(current.africa, ylab=ylab, main="Africa")
-plotXY(current.oceania, ylab=ylab, main="Oceania")
+plotXY(total.worst, ylab=ylab, main="Worst hit")
+plotXY(total.nordic, ylab=ylab, main="Nordic countries")
+plotXY(total.w.europe, ylab=ylab, main="Western Europe")
+plotXY(total.e.europe, ylab=ylab, main="Eastern Europe")
+plotXY(total.n.america, ylab=ylab, main="North America")
+plotXY(total.s.america, ylab=ylab, main="South America")
+plotXY(total.asia, ylab=ylab, main="Asia")
+plotXY(total.africa, ylab=ylab, main="Africa")
+plotXY(total.oceania, ylab=ylab, main="Oceania")
 dev.off()
 
 ## Timeline trajectories

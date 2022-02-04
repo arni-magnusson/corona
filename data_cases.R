@@ -2,8 +2,8 @@
 
 ## Before: continents.csv, time_series_covid19_confirmed_global.csv,
 ##         UID_ISO_FIPS_LookUp_Table.csv (bootstrap/data)
-## After:  cases_current.csv, cases_current_continent.csv,
-##         cases_doubling.csv, cases_rate.csv, cases_timeline.csv,
+## After:  cases_total.csv, cases_total_continent.csv, cases_doubling.csv,
+##         cases_rate.csv, cases_timeline.csv,
 ##         cases_timeline_continent.csv (data)
 
 library(TAF)
@@ -37,22 +37,22 @@ timeline.c <- aggregate(cbind(Cases,Daily)~Date+Continent, timeline, sum)
 timeline.c <- timeline.c[c("Continent", "Date", "Cases", "Daily")]
 
 
-## Current
+## Total
 cases <- aggregate(Cases~Country, timeline, tail, 1)
-current <- merge(pop, cases)
-current <- merge(current, continents)
-current <- na.omit(current)
-current.c <- aggregate(cbind(Population,Cases)~Continent, current, sum)
+total <- merge(pop, cases)
+total <- merge(total, continents)
+total <- na.omit(total)
+total.c <- aggregate(cbind(Population,Cases)~Continent, total, sum)
 
 ## Rate (cases percent) and doubling time
-current$Rate <- round(current$Cases / current$Population * 100, 2)
-current$Doubling <- sapply(current$Country, doubling.time, column="Cases")
-current.c$Rate <- round(current.c$Cases / current.c$Population * 100, 2)
+total$Rate <- round(total$Cases / total$Population * 100, 2)
+total$Doubling <- sapply(total$Country, doubling.time, column="Cases")
+total.c$Rate <- round(total.c$Cases / total.c$Population * 100, 2)
 
-rate <- current[current$Population>=1e5,]
+rate <- total[total$Population>=1e5,]
 rate <- tail(rate[order(rate$Rate),], 25)
 
-doubling <- current[current$Cases>=100,]
+doubling <- total[total$Cases>=100,]
 doubling <- doubling[order(doubling$Doubling),]
 doubling <- doubling[doubling$Doubling<=doubling$Doubling[20],]
 
@@ -66,9 +66,9 @@ doubling$Color <- rev(rich.colors(max(doubling$Rank), "blues"))[doubling$Rank]
 doubling <- doubling[order(-doubling$Doubling,doubling$Rank),]
 
 ## Write tables
-write.taf(current, "data/cases_current.csv", quote=TRUE)    # all countries
+write.taf(total, "data/cases_total.csv", quote=TRUE)        # all countries
 write.taf(doubling, "data/cases_doubling.csv", quote=TRUE)  # lowest doubling
 write.taf(rate, "data/cases_rate.csv", quote=TRUE)          # highest rate
 write.taf(timeline, "data/cases_timeline.csv", quote=TRUE)  # timeline
-write.taf(current.c, "data/cases_current_continent.csv", quote=TRUE)
+write.taf(total.c, "data/cases_total_continent.csv", quote=TRUE)
 write.taf(timeline.c, "data/cases_timeline_continent.csv", quote=TRUE)
