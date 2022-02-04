@@ -1,12 +1,6 @@
 library(lattice)   # xyplot
 library(reshape2)  # melt
 
-barCurrent <- function(x, main="", ...)
-{
-  barplot(x$TwoWeeks, names=x$Country, horiz=TRUE, las=1, main=main,
-          xlab="Current index", ...)
-}
-
 doubling.time <- function(country, column, data=timeline)
 {
   x <- data[data$Country==country,]
