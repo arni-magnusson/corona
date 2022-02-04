@@ -14,7 +14,8 @@ current <- read.taf("data/cases_current.csv")
 doubling <- read.taf("data/cases_doubling.csv")
 rate <- read.taf("data/cases_rate.csv")
 timeline <- read.taf("data/cases_timeline.csv")
-## Country sets: africa, asia, e.europe, euro5, latin, nordic, oceania, w.europe
+## Country sets: africa, asia, e.europe, euro5, n.america, nordic, oceania,
+## s.america, w.europe
 load("output/countries.RData")
 timeline$Date <- as.Date(timeline$Date)
 
@@ -32,9 +33,10 @@ onset.us <- min(us$Date[us$Cases>=100])
 ## Current
 current.worst <- current[current$Country %in% worst,]
 current.nordic <- current[current$Country %in% nordic,]
-current.latin <- current[current$Country %in% latin,]
 current.w.europe <- current[current$Country %in% w.europe,]
 current.e.europe <- current[current$Country %in% e.europe,]
+current.n.america <- current[current$Country %in% n.america,]
+current.s.america <- current[current$Country %in% s.america,]
 current.asia <- current[current$Country %in% asia,]
 current.africa <- current[current$Country %in% africa,]
 current.oceania <- current[current$Country %in% oceania,]
@@ -42,9 +44,10 @@ current.oceania <- current[current$Country %in% oceania,]
 ## Timeline
 timeline.worst <- timeline[timeline$Country %in% worst,]
 timeline.nordic <- timeline[timeline$Country %in% nordic,]
-timeline.latin <- timeline[timeline$Country %in% latin,]
 timeline.w.europe <- timeline[timeline$Country %in% w.europe,]
 timeline.e.europe <- timeline[timeline$Country %in% e.europe,]
+timeline.n.america <- timeline[timeline$Country %in% n.america,]
+timeline.s.america <- timeline[timeline$Country %in% s.america,]
 timeline.asia <- timeline[timeline$Country %in% asia,]
 timeline.africa <- timeline[timeline$Country %in% africa,]
 timeline.oceania <- timeline[timeline$Country %in% oceania,]
@@ -68,12 +71,13 @@ par(opar)
 
 ## Current scatterplots
 ylab <- "Total cases in population (%)"
-plotXY(current.worst,  ylab=ylab, main="Worst hit")
+plotXY(current.worst, ylab=ylab, main="Worst hit")
 plotXY(current.nordic, ylab=ylab, main="Nordic countries")
-plotXY(current.latin,  ylab=ylab, main="Latin America")
 plotXY(current.w.europe, ylab=ylab, main="Western Europe")
 plotXY(current.e.europe, ylab=ylab, main="Eastern Europe")
-plotXY(current.asia,   ylab=ylab, main="Asia")
+plotXY(current.n.america, ylab=ylab, main="North America")
+plotXY(current.s.america, ylab=ylab, main="South America")
+plotXY(current.asia, ylab=ylab, main="Asia")
 plotXY(current.africa, ylab=ylab, main="Africa")
 plotXY(current.oceania, ylab=ylab, main="Oceania")
 dev.off()
@@ -112,29 +116,32 @@ legend("bottomright", c("Europe","USA"), lwd=c(3,4), lty=c(1,3), col=c(2,4),
 ## Timeline daily cases by country
 oplt <- par("plt")
 par(mfrow=c(3,3))
-out <- lapply(split(timeline.worst, timeline.worst$Country), plotTimeBase,
-              span=0.25)
+out <- lapply(split(timeline.worst, timeline.worst$Country),
+              plotTimeBase, span=0.25)
 par(mfrow=c(3,3))
-out <- lapply(split(timeline.nordic, timeline.nordic$Country), plotTimeBase,
-              span=0.25)
+out <- lapply(split(timeline.nordic, timeline.nordic$Country),
+              plotTimeBase, span=0.25)
 par(mfrow=c(3,3))
-out <- lapply(split(timeline.latin, timeline.latin$Country), plotTimeBase,
-              span=0.25)
+out <- lapply(split(timeline.w.europe, timeline.w.europe$Country),
+              plotTimeBase, span=0.25)
 par(mfrow=c(3,3))
-out <- lapply(split(timeline.w.europe, timeline.w.europe$Country), plotTimeBase,
-              span=0.25)
+out <- lapply(split(timeline.e.europe, timeline.e.europe$Country),
+              plotTimeBase, span=0.25)
 par(mfrow=c(3,3))
-out <- lapply(split(timeline.e.europe, timeline.e.europe$Country), plotTimeBase,
-              span=0.25)
+out <- lapply(split(timeline.n.america, timeline.n.america$Country),
+              plotTimeBase, span=0.25)
 par(mfrow=c(3,3))
-out <- lapply(split(timeline.asia, timeline.asia$Country), plotTimeBase,
-              span=0.25)
+out <- lapply(split(timeline.s.america, timeline.s.america$Country),
+              plotTimeBase, span=0.25)
 par(mfrow=c(3,3))
-out <- lapply(split(timeline.africa, timeline.africa$Country), plotTimeBase,
-              span=0.25)
+out <- lapply(split(timeline.asia, timeline.asia$Country),
+              plotTimeBase, span=0.25)
+par(mfrow=c(3,3))
+out <- lapply(split(timeline.africa, timeline.africa$Country),
+              plotTimeBase, span=0.25)
 par(mfrow=c(4,3))
-out <- lapply(split(timeline.oceania, timeline.oceania$Country), plotTimeBase,
-              span=0.25)
+out <- lapply(split(timeline.oceania, timeline.oceania$Country),
+              plotTimeBase, span=0.25)
 
 ## Timeline cases worldwide
 par(mfrow=c(1,1))
