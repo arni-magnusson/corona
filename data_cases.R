@@ -17,6 +17,9 @@ cases.global <-
   read.taf("bootstrap/data/time_series_covid19_confirmed_global.csv")
 lookup <- read.taf("bootstrap/data/UID_ISO_FIPS_LookUp_Table.csv")
 continents <- read.taf("bootstrap/data/continents.csv")
+continents$Continent <-
+  ordered(continents$Continent,
+          c("Oceania", "Asia", "Africa", "S America", "N America", "Europe"))
 
 ## Population
 pop <- lookup[lookup$Province_State=="", c("Country_Region","Population")]
