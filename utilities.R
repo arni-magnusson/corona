@@ -9,6 +9,7 @@ barplotCorona <- function(height, names.arg=NULL, xlab=NULL, col=NULL,
           xlab=xlab, ...)
   grid(nx=NULL, ny=NA, lty=1, lwd=1)
   barplot(height, horiz=TRUE, axes=FALSE, col=col, add=TRUE, ...)
+  par(opar)
 }
 
 doubling.time <- function(country, column, data=timeline)
