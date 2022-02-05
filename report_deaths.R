@@ -56,20 +56,12 @@ timeline.oceania <- timeline[timeline$Country %in% oceania,]
 
 ## Total worst deaths
 pdf("report/deaths_total.pdf")
-opar <- par(plt=c(0.30, 0.94, 0.15, 0.88))
-barplot(rate$Rate, names=rate$Country, horiz=TRUE, las=1, col=NA, border=FALSE,
-        xlab="Deaths per 1000 inhabitants")
-grid(nx=NULL, ny=NA, lty=1, lwd=1)
-barplot(rate$Rate, horiz=TRUE, axes=FALSE, col=rate$Color, add=TRUE)
-par(opar)
+barplotCorona(rate$Rate, names=rate$Country, col=rate$Color,
+              xlab="Deaths per 1000 inhabitants")
 
 ## Total worst doubling time
-par(plt=c(0.30, 0.94, 0.15, 0.88))
-barplot(doubling$Doubling, names=doubling$Country, horiz=TRUE, las=1, col=NA,
-        border=FALSE, xlab="Doubling time of deaths (days)")
-grid(nx=NULL, ny=NA, lty=1, lwd=1)
-barplot(doubling$Doubling, horiz=TRUE, axes=FALSE, col=doubling$Color, add=TRUE)
-par(opar)
+barplotCorona(doubling$Doubling, names=doubling$Country, col=doubling$Color,
+              xlab="Doubling time of deaths (days)")
 
 ## Total scatterplots
 ylab <- "Deaths per 1000"

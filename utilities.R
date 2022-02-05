@@ -1,6 +1,16 @@
 library(lattice)   # xyplot
 library(reshape2)  # melt
 
+barplotCorona <- function(height, names.arg=NULL, xlab=NULL, col=NULL,
+                          plt=c(0.40, 0.94, 0.15, 0.88), ...)
+{
+  opar <- par(plt=plt)
+  barplot(height, names.arg=names.arg, horiz=TRUE, las=1, col=NA, border=FALSE,
+          xlab=xlab, ...)
+  grid(nx=NULL, ny=NA, lty=1, lwd=1)
+  barplot(height, horiz=TRUE, axes=FALSE, col=col, add=TRUE, ...)
+}
+
 doubling.time <- function(country, column, data=timeline)
 {
   x <- data[data$Country==country,]
