@@ -30,8 +30,7 @@ plotTimeBase <- function(data, start="2020-03-01", ylim=NULL, lwd=3, col.line=4,
   if(points)
     points(data$Date, data$Daily, col=col.points)
   lines(data$Date, fit, lwd=lwd, col=col.line)
-  text(as.Date(start)+2, 0.9*par("usr")[4], data$Country[1], adj=0,
-       cex=cex.label)
+  text(as.Date(start)+2, 0.9*par("usr")[4], data[1,1], adj=0, cex=cex.label)
   par(opar)
 }
 
