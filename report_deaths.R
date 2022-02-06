@@ -86,7 +86,13 @@ plotXY(total.africa, ylab=ylab, main="Africa")
 plotXY(total.oceania, ylab=ylab, main="Oceania")
 
 ## Total by continent
-barplotCorona(total.c$Rate, names=total.c$Continent, col="orange",
+world.c <- data.frame(Continent="(World)",
+                      Population=sum(total.c$Population),
+                      Deaths=sum(total.c$Deaths),
+                      Rate=sum(total.c$Deaths)/sum(total.c$Population)*1000)
+combined.c <- rbind(world.c, total.c)
+barplotCorona(combined.c$Rate, names=combined.c$Continent,
+              col=c("gray95", rep("orange",6)),
               main="Total deaths by continent",
               xlab="Deaths per 1000 inhabitants")
 dev.off()
