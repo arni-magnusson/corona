@@ -13,8 +13,8 @@ system(paste("pdftk report/deaths_total.pdf cat 1 5 7 8 11 12",
              "output report/total.pdf"))
 ## Timeline
 ##   2=EUvsUS, 6=W Europe, 8=N America, 9=S America, 12=Oceania, 13=continents,
-##   15=world
-system(paste("pdftk report/deaths_tseries.pdf cat 2 6 8 9 12 13 15",
+##   15=world by year, 16=world daily
+system(paste("pdftk report/deaths_tseries.pdf cat 2 6 8 9 12 13 15 16",
              "output report/tseries.pdf"))
 
 ## Week

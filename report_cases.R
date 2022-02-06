@@ -164,6 +164,11 @@ par(mfrow=c(1,1))
 par(plt=oplt)
 plot(log10(Cases)~Date, world, main="Total cases worldwide")
 
+world$Year <- as.integer(format(world$Date, "%Y"))
+annual <- tapply(world$Daily, world$Year, sum) / 1e6
+barplot(annual, main="Total cases worldwide", xlab="Year",
+        ylab="Cases (million)", col="brown")
+
 plot(Daily/1000~Date, world, main="Daily cases worldwide",
      ylab="Cases (thousands)")
 lines(world$Date, fitted(loess(Daily/1000~as.integer(Date), world, span=0.10)),
