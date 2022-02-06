@@ -12,7 +12,7 @@ barplotCorona <- function(height, names.arg=NULL, xlab=NULL, col=NULL,
   par(opar)
 }
 
-doubling.time <- function(country, column, data=timeline)
+doubling.time <- function(country, column, data=tseries)
 {
   x <- data[data$Country==country,]
   sum(x[[column]] >= tail(x[[column]],1) / 2)
@@ -37,7 +37,7 @@ plotTimeBase <- function(data, start="2020-03-01", ylim=NULL, lwd=3, col.line=4,
   par(opar)
 }
 
-plotTimeLattice <- function(countries, main="", data=timeline, ...)
+plotTimeLattice <- function(countries, main="", data=tseries, ...)
 {
   pars <- list(axis.text=list(cex=0.7), par.xlab.text=list(cex=0.7),
                par.ylab.text=list(cex=0.7), plot.line=list(lwd=2))

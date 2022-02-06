@@ -1,8 +1,8 @@
 ## Prepare plots and tables for deaths
 
 ## Before: deaths_total.csv, deaths_doubling.csv, deaths_rate.csv,
-##         deaths_timeline.csv (data), countries.RData (output)
-## After:  deaths_total.pdf, deaths_timeline.pdf (report)
+##         deaths_tseries.csv (data), countries.RData (output)
+## After:  deaths_total.pdf, deaths_tseries.pdf (report)
 
 library(TAF)
 source("utilities.R")  # barplotCorona, plotTimeBase, plotXY
@@ -13,30 +13,30 @@ mkdir("report")
 total <- read.taf("data/deaths_total.csv")
 doubling <- read.taf("data/deaths_doubling.csv")
 rate <- read.taf("data/deaths_rate.csv")
-timeline <- read.taf("data/deaths_timeline.csv")
+tseries <- read.taf("data/deaths_tseries.csv")
 total.c <- read.taf("data/deaths_total_continent.csv")
-timeline.c <- read.taf("data/deaths_timeline_continent.csv")
+tseries.c <- read.taf("data/deaths_tseries_continent.csv")
 ## Country sets: africa, asia, e.europe, euro5, n.america, nordic, oceania,
 ## s.america, w.europe
 load("output/countries.RData")
-timeline.c$Continent <-
-  ordered(timeline.c$Continent,
+tseries.c$Continent <-
+  ordered(tseries.c$Continent,
           c("N America", "Europe", "S America", "Africa", "Oceania", "Asia"))
-timeline$Date <- as.Date(timeline$Date)
-timeline.c$Date <- as.Date(timeline.c$Date)
+tseries$Date <- as.Date(tseries$Date)
+tseries.c$Date <- as.Date(tseries.c$Date)
 total$Rate <- total$Rate / 1000      # plot per million
 total.c$Rate <- total.c$Rate / 1000  # plot per million
 rate$Rate <- rate$Rate / 1000        # plot per million
 
 ## World
-world <- aggregate(cbind(Deaths,Daily)~Date, data=timeline, sum)
+world <- aggregate(cbind(Deaths,Daily)~Date, data=tseries, sum)
 worst <- tail(rate$Country, 9)
 
 ## Europe vs US
-euro5 <- timeline[timeline$Country %in% euro5,]
+euro5 <- tseries[tseries$Country %in% euro5,]
 euro5 <- aggregate(Deaths~Date, euro5, sum)
 onset.euro5 <- min(euro5$Date[euro5$Deaths>=100])
-us <- timeline[timeline$Country=="US",]
+us <- tseries[tseries$Country=="US",]
 onset.us <- min(us$Date[us$Deaths>=100])
 
 ## Total
@@ -51,15 +51,15 @@ total.africa <- total[total$Country %in% africa,]
 total.oceania <- total[total$Country %in% oceania,]
 
 ## Timeline
-timeline.worst <- timeline[timeline$Country %in% worst,]
-timeline.nordic <- timeline[timeline$Country %in% nordic,]
-timeline.w.europe <- timeline[timeline$Country %in% w.europe,]
-timeline.e.europe <- timeline[timeline$Country %in% e.europe,]
-timeline.n.america <- timeline[timeline$Country %in% n.america,]
-timeline.s.america <- timeline[timeline$Country %in% s.america,]
-timeline.asia <- timeline[timeline$Country %in% asia,]
-timeline.africa <- timeline[timeline$Country %in% africa,]
-timeline.oceania <- timeline[timeline$Country %in% oceania,]
+tseries.worst <- tseries[tseries$Country %in% worst,]
+tseries.nordic <- tseries[tseries$Country %in% nordic,]
+tseries.w.europe <- tseries[tseries$Country %in% w.europe,]
+tseries.e.europe <- tseries[tseries$Country %in% e.europe,]
+tseries.n.america <- tseries[tseries$Country %in% n.america,]
+tseries.s.america <- tseries[tseries$Country %in% s.america,]
+tseries.asia <- tseries[tseries$Country %in% asia,]
+tseries.africa <- tseries[tseries$Country %in% africa,]
+tseries.oceania <- tseries[tseries$Country %in% oceania,]
 
 ## Total worst deaths
 pdf("report/deaths_total.pdf")
@@ -88,9 +88,9 @@ barplotCorona(total.c$Rate, names=total.c$Continent, col="orange",
 dev.off()
 
 ## Timeline trajectories
-pdf("report/deaths_timeline.pdf")
-split.worst <- split(timeline.worst, timeline.worst$Country)
-plot(log10(Deaths)~Date, timeline.worst, xlab="Date", ylab="log10(Deaths)",
+pdf("report/deaths_tseries.pdf")
+split.worst <- split(tseries.worst, tseries.worst$Country)
+plot(log10(Deaths)~Date, tseries.worst, xlab="Date", ylab="log10(Deaths)",
      type="n")
 col <- c(palette(), "red")
 for(i in seq_along(split.worst))
@@ -121,36 +121,36 @@ legend("bottomright", c("Europe","USA"), lwd=c(3,4), lty=c(1,3), col=c(2,4),
 ## Timeline daily deaths by country
 oplt <- par("plt")
 par(mfrow=c(3,3))
-out <- lapply(split(timeline.worst, timeline.worst$Country),
+out <- lapply(split(tseries.worst, tseries.worst$Country),
               plotTimeBase, span=0.25)
 par(mfrow=c(3,3))
-out <- lapply(split(timeline.nordic, timeline.nordic$Country),
+out <- lapply(split(tseries.nordic, tseries.nordic$Country),
               plotTimeBase, span=0.25)
 par(mfrow=c(3,3))
-out <- lapply(split(timeline.w.europe, timeline.w.europe$Country),
+out <- lapply(split(tseries.w.europe, tseries.w.europe$Country),
               plotTimeBase, span=0.25)
 par(mfrow=c(3,3))
-out <- lapply(split(timeline.e.europe, timeline.e.europe$Country),
+out <- lapply(split(tseries.e.europe, tseries.e.europe$Country),
               plotTimeBase, span=0.25)
 par(mfrow=c(3,3))
-out <- lapply(split(timeline.n.america, timeline.n.america$Country),
+out <- lapply(split(tseries.n.america, tseries.n.america$Country),
               plotTimeBase, span=0.25)
 par(mfrow=c(3,3))
-out <- lapply(split(timeline.s.america, timeline.s.america$Country),
+out <- lapply(split(tseries.s.america, tseries.s.america$Country),
               plotTimeBase, span=0.25)
 par(mfrow=c(3,3))
-out <- lapply(split(timeline.asia, timeline.asia$Country),
+out <- lapply(split(tseries.asia, tseries.asia$Country),
               plotTimeBase, span=0.25)
 par(mfrow=c(3,3))
-out <- lapply(split(timeline.africa, timeline.africa$Country),
+out <- lapply(split(tseries.africa, tseries.africa$Country),
               plotTimeBase, span=0.25)
 par(mfrow=c(4,3))
-out <- lapply(split(timeline.oceania, timeline.oceania$Country),
+out <- lapply(split(tseries.oceania, tseries.oceania$Country),
               plotTimeBase, span=0.25)
 
 ## Timeline deaths by continent
 par(mfrow=c(3,2))
-out <- lapply(split(timeline.c, timeline.c$Continent), plotTimeBase, span=0.10)
+out <- lapply(split(tseries.c, tseries.c$Continent), plotTimeBase, span=0.10)
 
 ## Timeline deaths worldwide
 par(mfrow=c(1,1))

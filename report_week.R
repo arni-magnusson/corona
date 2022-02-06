@@ -1,6 +1,6 @@
 ## Prepare plots and tables for week
 
-## Before: deaths_timeline.csv (data), week.csv, week_full.csv (output)
+## Before: deaths_tseries.csv (data), week.csv, week_full.csv (output)
 ## After:  week.pdf (report)
 
 library(TAF)
@@ -9,14 +9,14 @@ source("utilities.R")  # barplotCorona
 mkdir("report")
 
 ## Read data
-timeline <- read.taf("data/deaths_timeline.csv")
-timeline$Date <- as.Date(timeline$Date)
+tseries <- read.taf("data/deaths_tseries.csv")
+tseries$Date <- as.Date(tseries$Date)
 week <- read.taf("output/week.csv")
 week.full <- read.taf("output/week_full.csv")
 week.c <- read.taf("output/week_continent.csv")
 
 ## Prepare label
-dates <- sort(unique(timeline$Date[timeline$Date>max(timeline$Date)-7]))
+dates <- sort(unique(tseries$Date[tseries$Date>max(tseries$Date)-7]))
 main.week <- paste0("Last week ", "(",
                     paste(range(dates), collapse=" to "), ")")
 

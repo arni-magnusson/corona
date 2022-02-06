@@ -3,8 +3,8 @@
 ## Before: continents.csv, time_series_covid19_deaths_global.csv,
 ##         UID_ISO_FIPS_LookUp_Table.csv (bootstrap/data)
 ## After:  deaths_total.csv, deaths_total_continent.csv, deaths_doubling.csv,
-##         deaths_rate.csv, deaths_timeline.csv,
-##         deaths_timeline_continent.csv (data)
+##         deaths_rate.csv, deaths_tseries.csv,
+##         deaths_tseries_continent.csv (data)
 
 library(TAF)
 suppressPackageStartupMessages(library(gplots))  # rich.colors
@@ -29,19 +29,19 @@ countries <- sort(pop$Country[!is.na(pop$Population)])
 stopifnot(identical(countries, continents$Country))
 
 ## Reshape and calculate daily statistics
-timeline <- rearrange(deaths.global, "Deaths")
-timeline <- timeline[timeline$Country %in% countries,]  # actual countries
-timeline$Deaths[timeline$Country=="Iceland" & timeline$Date=="2020-03-15"] <- 0
-timeline <- merge(timeline, continents)
-timeline <- timeline[c("Country", "Continent", "Date", "Deaths")]
-timeline$Daily <- c(timeline$Deaths[1], diff(timeline$Deaths))
-timeline$Daily[timeline$Date == min(timeline$Date)] <-
-  timeline$Deaths[timeline$Date == min(timeline$Date)]
-timeline.c <- aggregate(cbind(Deaths,Daily)~Date+Continent, timeline, sum)
-timeline.c <- timeline.c[c("Continent", "Date", "Deaths", "Daily")]
+tseries <- rearrange(deaths.global, "Deaths")
+tseries <- tseries[tseries$Country %in% countries,]  # actual countries
+tseries$Deaths[tseries$Country=="Iceland" & tseries$Date=="2020-03-15"] <- 0
+tseries <- merge(tseries, continents)
+tseries <- tseries[c("Country", "Continent", "Date", "Deaths")]
+tseries$Daily <- c(tseries$Deaths[1], diff(tseries$Deaths))
+tseries$Daily[tseries$Date == min(tseries$Date)] <-
+  tseries$Deaths[tseries$Date == min(tseries$Date)]
+tseries.c <- aggregate(cbind(Deaths,Daily)~Date+Continent, tseries, sum)
+tseries.c <- tseries.c[c("Continent", "Date", "Deaths", "Daily")]
 
 ## Total
-deaths <- aggregate(Deaths~Country, timeline, tail, 1)
+deaths <- aggregate(Deaths~Country, tseries, tail, 1)
 total <- merge(pop, deaths)
 total <- merge(total, continents)
 total <- na.omit(total)
@@ -72,6 +72,6 @@ doubling <- doubling[order(-doubling$Doubling,doubling$Rank),]
 write.taf(total, "data/deaths_total.csv", quote=TRUE)        # all countries
 write.taf(doubling, "data/deaths_doubling.csv", quote=TRUE)  # lowest doubling
 write.taf(rate, "data/deaths_rate.csv", quote=TRUE)          # highest rate
-write.taf(timeline, "data/deaths_timeline.csv", quote=TRUE)  # timeline
+write.taf(tseries, "data/deaths_tseries.csv", quote=TRUE)    # tseries
 write.taf(total.c, "data/deaths_total_continent.csv", quote=TRUE)
-write.taf(timeline.c, "data/deaths_timeline_continent.csv", quote=TRUE)
+write.taf(tseries.c, "data/deaths_tseries_continent.csv", quote=TRUE)
