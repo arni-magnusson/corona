@@ -21,12 +21,14 @@ doubling.time <- function(country, column, data=timeline)
 plotTimeBase <- function(data, start="2020-03-01", ylim=NULL, lwd=3, col.line=4,
                          col.points=8, cex.label=1.2, points=FALSE, ...)
 {
-  ## data contains Country, Date, Daily
+  ## data contains Country/Continent, Date, Daily
   opar <- par(plt=c(0.15,0.9,0.15,0.9))
   data <- data[data$Date >= start,]
   fit <- fitted(loess(Daily~as.integer(Date), data, ...))
   if(is.null(ylim))
     ylim <- if(points) lim(c(fit, data$Daily), mult=1.2) else lim(fit, mult=1.2)
+  if(max(ylim) == 0)
+    ylim <- c(0, 0.01)
   plot(data$Date, fit, type="n", ylim=ylim, ann=FALSE)
   if(points)
     points(data$Date, data$Daily, col=col.points)
