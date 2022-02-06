@@ -4,6 +4,7 @@
 ## After:  week.pdf (report)
 
 library(TAF)
+source("utilities.R")  # barplotCorona
 
 mkdir("report")
 
@@ -12,6 +13,7 @@ timeline <- read.taf("data/deaths_timeline.csv")
 timeline$Date <- as.Date(timeline$Date)
 week <- read.taf("output/week.csv")
 week.full <- read.taf("output/week_full.csv")
+week.c <- read.taf("output/week_continent.csv")
 
 ## Prepare label
 dates <- sort(unique(timeline$Date[timeline$Date>max(timeline$Date)-7]))
@@ -20,18 +22,13 @@ main.week <- paste0("Last week ", "(",
 
 ## Death rate last week
 pdf("report/week.pdf")
-opar <- par(plt=c(0.34, 0.94, 0.15, 0.88))
-barplot(week$WeekRate, names=week$Country, horiz=TRUE, las=1, col=NA,
-        border=FALSE, main=main.week, xlab="Deaths per million inhabitants")
-grid(nx=NULL, ny=NA, lty=1, lwd=1)
-barplot(week$WeekRate, horiz=TRUE, axes=FALSE, col="brown", add=TRUE)
+barplotCorona(week$WeekRate, names=week$Country, col="brown", main=main.week,
+              xlab="Deaths per million inhabitants")
 
 ## Death rate last week and before
-barplot(week$Rate, names=week$Country, horiz=TRUE, las=1, col=NA, border=FALSE,
-        main=main.week, xlab="Deaths per million inhabitants")
-grid(nx=NULL, ny=NA, lty=1, lwd=1)
-barplot(t(week[c("WeekRate","PrevRate")]), horiz=TRUE, axes=FALSE,
-        col=c("brown","gray95"), add=TRUE)
+barplotCorona(t(week[c("WeekRate","PrevRate")]), names=week$Country,
+              col=c("brown","gray95"), main=main.week,
+              xlab="Deaths per million inhabitants")
 
 ## Deaths last week
 w <- week.full[c("Country","WeekDeaths")]
@@ -40,12 +37,17 @@ w$Country[w$WeekDeaths < cutoff] <- "Other"
 w <- aggregate(WeekDeaths~Country, w, sum)
 
 w <- w[order(w$WeekDeaths),]
-barplot(w$WeekDeaths[w$Country!="Other"]/7, names=w$Country[w$Country!="Other"],
-        horiz=TRUE, las=1, col=NA, border=FALSE, main=main.week,
-        xlab="Average daily deaths")
-grid(nx=NULL, ny=NA, lty=1, lwd=1)
-barplot(w$WeekDeaths[w$Country!="Other"]/7, horiz=TRUE, axes=FALSE,
-        col="orange", add=TRUE)
+barplotCorona(w$WeekDeaths[w$Country!="Other"]/7,
+              names=w$Country[w$Country!="Other"], col="orange", main=main.week,
+              xlab="Average daily deaths")
 
-par(opar)
+## By continent
+barplotCorona(week.c$WeekRate, names=week.c$Continent, col="brown", main=main.week,
+              xlab="Deaths per million inhabitants")
+barplotCorona(t(week.c[c("WeekRate","PrevRate")]), names=week.c$Continent,
+              col=c("brown","gray95"), main=main.week,
+              xlab="Deaths per million inhabitants")
+barplotCorona(week.c$WeekDeaths/7, names=week.c$Continent, col="orange",
+              main=main.week, xlab="Average daily deaths")
+
 dev.off()

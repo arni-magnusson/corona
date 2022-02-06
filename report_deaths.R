@@ -5,7 +5,7 @@
 ## After:  deaths_total.pdf, deaths_timeline.pdf (report)
 
 library(TAF)
-source("utilities.R")  # plotTimeBase, plotXY
+source("utilities.R")  # barplotCorona, plotTimeBase, plotXY
 
 mkdir("report")
 
@@ -14,12 +14,19 @@ total <- read.taf("data/deaths_total.csv")
 doubling <- read.taf("data/deaths_doubling.csv")
 rate <- read.taf("data/deaths_rate.csv")
 timeline <- read.taf("data/deaths_timeline.csv")
+total.c <- read.taf("data/deaths_total_continent.csv")
+timeline.c <- read.taf("data/deaths_timeline_continent.csv")
 ## Country sets: africa, asia, e.europe, euro5, n.america, nordic, oceania,
 ## s.america, w.europe
 load("output/countries.RData")
+timeline.c$Continent <-
+  ordered(timeline.c$Continent,
+          c("N America", "Europe", "S America", "Africa", "Oceania", "Asia"))
 timeline$Date <- as.Date(timeline$Date)
-total$Rate <- total$Rate / 1000  # plot per million
-rate$Rate <- rate$Rate / 1000  # plot per million
+timeline.c$Date <- as.Date(timeline.c$Date)
+total$Rate <- total$Rate / 1000      # plot per million
+total.c$Rate <- total.c$Rate / 1000  # plot per million
+rate$Rate <- rate$Rate / 1000        # plot per million
 
 ## World
 world <- aggregate(cbind(Deaths,Daily)~Date, data=timeline, sum)
@@ -74,6 +81,10 @@ plotXY(total.s.america,  ylab=ylab, main="South America")
 plotXY(total.asia,   ylab=ylab, main="Asia")
 plotXY(total.africa, ylab=ylab, main="Africa")
 plotXY(total.oceania, ylab=ylab, main="Oceania")
+
+## Total by continent
+barplotCorona(total.c$Rate, names=total.c$Continent, col="orange",
+              xlab="Deaths per 1000 inhabitants")
 dev.off()
 
 ## Timeline trajectories
@@ -133,9 +144,13 @@ out <- lapply(split(timeline.asia, timeline.asia$Country),
 par(mfrow=c(3,3))
 out <- lapply(split(timeline.africa, timeline.africa$Country),
               plotTimeBase, span=0.25)
-par(mfrow=c(3,4))
+par(mfrow=c(4,3))
 out <- lapply(split(timeline.oceania, timeline.oceania$Country),
               plotTimeBase, span=0.25)
+
+## Timeline deaths by continent
+par(mfrow=c(3,2))
+out <- lapply(split(timeline.c, timeline.c$Continent), plotTimeBase, span=0.10)
 
 ## Timeline deaths worldwide
 par(mfrow=c(1,1))
