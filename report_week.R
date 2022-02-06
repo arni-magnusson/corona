@@ -2,7 +2,7 @@
 
 ## Before: deaths_tseries.csv (data), week.csv, week_continent.csv,
 ##         week_full.csv (output)
-## After:  week.pdf (report)
+## After:  deaths_week.pdf (report)
 
 library(TAF)
 source("utilities.R")  # barplotCorona
@@ -22,7 +22,7 @@ main.week <- paste0("Last week ", "(",
                     paste(range(dates), collapse=" to "), ")")
 
 ## Death rate last week
-pdf("report/week.pdf")
+pdf("report/deaths_week.pdf")
 barplotCorona(week$WeekRate, names=week$Country, col="brown", main=main.week,
               xlab="Deaths per million inhabitants")
 
