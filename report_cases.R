@@ -62,15 +62,17 @@ tseries.oceania <- tseries[tseries$Country %in% oceania,]
 ## Total worst cases
 pdf("report/cases_total.pdf")
 barplotCorona(rate$Rate, names=rate$Country, col=rate$Color,
+              main="Countries with the most cases",
               xlab="Total cases in population (%)")
 
 ## Total worst doubling time
 barplotCorona(doubling$Doubling, names=doubling$Country, col=doubling$Color,
+              main="Countries with the shortest doubling time",
               xlab="Doubling time of cases (days)")
 
 ## Total scatterplots
 ylab <- "Total cases in population (%)"
-plotXY(total.worst, ylab=ylab, main="Worst hit")
+plotXY(total.worst, ylab=ylab, main="Countries with the most cases")
 plotXY(total.nordic, ylab=ylab, main="Nordic countries")
 plotXY(total.w.europe, ylab=ylab, main="Western Europe")
 plotXY(total.e.europe, ylab=ylab, main="Eastern Europe")
@@ -81,7 +83,8 @@ plotXY(total.africa, ylab=ylab, main="Africa")
 plotXY(total.oceania, ylab=ylab, main="Oceania")
 
 ## Total by continent
-barplotCorona(total.c$Rate, names=total.c$Continent, col="orange",
+barplotCorona(total.c$Rate, names=total.c$Continent,
+              main="Total cases by continent", col="orange",
               xlab="Total cases in population (%)")
 dev.off()
 
