@@ -1,7 +1,8 @@
 ## Prepare plots and tables for deaths
 
-## Before: deaths_total.csv, deaths_doubling.csv, deaths_rate.csv,
-##         deaths_tseries.csv (data), countries.RData (output)
+## Before: deaths_doubling.csv, deaths_rate.csv, deaths_total.csv,
+##         deaths_total_continent.csv, deaths_tseries.csv,
+##         deaths_tseries.continent (data), countries.RData (output)
 ## After:  deaths_total.pdf, deaths_tseries.pdf (report)
 
 library(TAF)

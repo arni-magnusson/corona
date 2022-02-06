@@ -2,8 +2,9 @@
 
 ## Before: continents.csv, time_series_covid19_confirmed_global.csv,
 ##         UID_ISO_FIPS_LookUp_Table.csv (bootstrap/data)
-## After:  cases_total.csv, cases_total_continent.csv, cases_doubling.csv,
-##         cases_rate.csv, cases_tseries.csv, cases_tseries_continent.csv (data)
+## After:  cases_doubling.csv, cases_rate.csv, cases_total.csv,
+##         cases_total_continent.csv, cases_tseries.csv,
+##         cases_tseries_continent.csv (data)
 
 library(TAF)
 suppressPackageStartupMessages(library(gplots))  # rich.colors

@@ -2,8 +2,8 @@
 
 ## Before: continents.csv, time_series_covid19_deaths_global.csv,
 ##         UID_ISO_FIPS_LookUp_Table.csv (bootstrap/data)
-## After:  deaths_total.csv, deaths_total_continent.csv, deaths_doubling.csv,
-##         deaths_rate.csv, deaths_tseries.csv,
+## After:  deaths_doubling.csv, deaths_rate.csv, deaths_total.csv,
+##         deaths_total_continent.csv, deaths_tseries.csv,
 ##         deaths_tseries_continent.csv (data)
 
 library(TAF)

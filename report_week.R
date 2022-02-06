@@ -1,6 +1,7 @@
 ## Prepare plots and tables for week
 
-## Before: deaths_tseries.csv (data), week.csv, week_full.csv (output)
+## Before: deaths_tseries.csv (data), week.csv, week_continent.csv,
+##         week_full.csv (output)
 ## After:  week.pdf (report)
 
 library(TAF)

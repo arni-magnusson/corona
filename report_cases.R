@@ -1,7 +1,8 @@
 ## Prepare plots and tables for cases
 
-## Before: cases_total.csv, cases_doubling.csv, cases_rate.csv,
-##         cases_tseries.csv (data), countries.RData (output)
+## Before: cases_doubling.csv, cases_rate.csv, cases_total.csv,
+##         cases_total_continent.csv, cases_tseries.csv,
+##         cases_tseries_continent.csv (data), countries.RData (output)
 ## After:  cases_total.pdf, cases_tseries.pdf (report)
 
 library(TAF)

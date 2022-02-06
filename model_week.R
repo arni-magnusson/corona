@@ -1,7 +1,7 @@
 ## Run analysis of last week, write model results
 
 ## Before: deaths_total.csv, deaths_tseries.csv (data)
-## After:  week.csv, week_full.csv (model)
+## After:  week.csv, week_continent.csv, week_full.csv (model)
 
 library(TAF)
 

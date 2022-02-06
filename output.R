@@ -1,7 +1,7 @@
 ## Extract results of interest, write TAF output tables
 
-## Before: *.csv (model)
-## After:  *.csv (output)
+## Before: countries.RData, week.csv, week_continent.csv, week_full.csv (model)
+## After:  countries.RData, week.csv, week_continent.csv, week_full.csv (output)
 
 library(TAF)
 
