@@ -168,9 +168,12 @@ par(plt=oplt)
 plot(log10(Deaths)~Date, world, main="Total deaths worldwide")
 
 world$Year <- as.integer(format(world$Date, "%Y"))
-annual <- tapply(world$Daily, world$Year, sum) / 1e6
-barplot(annual, main="Total deaths worldwide", xlab="Year",
+annual.total <- tapply(world$Daily, world$Year, sum) / 1e6
+annual.average <- tapply(world$Daily, world$Year, mean)
+barplot(annual.total, main="Total deaths worldwide", xlab="Year",
         ylab="Deaths (million)", col="brown")
+barplot(annual.average, main="Average daily deaths worldwide", xlab="Year",
+        ylab="Average daily deaths", col="orange")
 
 plot(Daily~Date, world, main="Daily deaths worldwide",
      ylab="Deaths")

@@ -165,9 +165,12 @@ par(plt=oplt)
 plot(log10(Cases)~Date, world, main="Total cases worldwide")
 
 world$Year <- as.integer(format(world$Date, "%Y"))
-annual <- tapply(world$Daily, world$Year, sum) / 1e6
-barplot(annual, main="Total cases worldwide", xlab="Year",
+annual.total <- tapply(world$Daily, world$Year, sum) / 1e6
+annual.average <- tapply(world$Daily, world$Year, mean)
+barplot(annual.total, main="Total cases worldwide", xlab="Year",
         ylab="Cases (million)", col="brown")
+barplot(annual.average, main="Average daily cases worldwide", xlab="Year",
+        ylab="Average daily cases", col="orange")
 
 plot(Daily/1000~Date, world, main="Daily cases worldwide",
      ylab="Cases (thousands)")
