@@ -6,11 +6,7 @@ have been affected.
 
 ## How to run
 
-Install the TAF package from CRAN:
-
-```
-install.packages("TAF")
-```
+Install the TAF package from CRAN and clone this repository to your computer.
 
 Then open R in the `corona` directory and run:
 
