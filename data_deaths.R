@@ -14,8 +14,8 @@ mkdir("data")
 
 ## Read data
 deaths.global <-
-  read.taf("bootstrap/data/time_series_covid19_deaths_global.csv")
-lookup <- read.taf("bootstrap/data/UID_ISO_FIPS_LookUp_Table.csv")
+  read.taf("bootstrap/data/jh/time_series_covid19_deaths_global.csv")
+lookup <- read.taf("bootstrap/data/jh/UID_ISO_FIPS_LookUp_Table.csv")
 continents <- read.taf("bootstrap/data/continents.csv")
 continents$Continent <-
   ordered(continents$Continent,
