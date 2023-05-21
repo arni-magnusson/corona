@@ -114,7 +114,7 @@ legend("bottomright", c("Europe","USA"), lwd=c(3,4), lty=c(1,3), col=c(2,4),
        bty="n", inset=0.04)
 
 plot(log10(Deaths)~Date, data=euro5, type="l",
-     ylim=c(2, log10(1.05*max(c(euro5$deaths, us$Deaths)))), col=2,
+     ylim=c(2, log10(2*max(c(euro5$deaths, us$Deaths)))), col=2,
      lwd=3, main="Europe (de, uk, fr, it, sp) vs. USA", yaxt="n")
 axis(2, seq(floor(par("usr")[3]), floor(par("usr")[4])))
 lines(log10(Deaths)~Date, data=us, col=4, lwd=4, lty=3)
@@ -162,11 +162,11 @@ plot(log10(Deaths)~Date, world, main="Total deaths worldwide")
 
 world$Year <- as.integer(format(world$Date, "%Y"))
 annual.total <- tapply(world$Daily, world$Year, sum) / 1e6
-annual.average <- tapply(world$Daily, world$Year, mean)
+annual.average <- tapply(world$Daily, world$Year, mean) / 1e3
 barplot(annual.total, main="Total deaths worldwide", xlab="Year",
         ylab="Deaths (million)", col="brown")
 barplot(annual.average, main="Average daily deaths worldwide", xlab="Year",
-        ylab="Average daily deaths", col="orange")
+        ylab="Average daily deaths (thousands)", col="orange")
 
 plot(Daily~Date, world, main="Daily deaths worldwide",
      ylab="Deaths")
