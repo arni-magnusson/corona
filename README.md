@@ -12,8 +12,8 @@ Then open R in the `corona` directory and run:
 
 ```
 library(TAF)
-taf.bootstrap()
-sourceAll()
+taf.boot()
+source.all()
 ```
 
 ## Explore results

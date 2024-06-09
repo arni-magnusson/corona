@@ -1,7 +1,7 @@
 ## Preprocess cases, write TAF data tables
 
 ## Before: continents.csv, time_series_covid19_confirmed_global.csv,
-##         UID_ISO_FIPS_LookUp_Table.csv (bootstrap/data)
+##         UID_ISO_FIPS_LookUp_Table.csv (boot/data)
 ## After:  cases_doubling.csv, cases_rate.csv, cases_total.csv,
 ##         cases_total_continent.csv, cases_tseries.csv,
 ##         cases_tseries_continent.csv (data)
@@ -14,9 +14,9 @@ mkdir("data")
 
 ## Read data
 cases.global <-
-  read.taf("bootstrap/data/jh/time_series_covid19_confirmed_global.csv")
-lookup <- read.taf("bootstrap/data/jh/UID_ISO_FIPS_LookUp_Table.csv")
-continents <- read.taf("bootstrap/data/continents.csv")
+  read.taf("boot/data/jh/time_series_covid19_confirmed_global.csv")
+lookup <- read.taf("boot/data/jh/UID_ISO_FIPS_LookUp_Table.csv")
+continents <- read.taf("boot/data/continents.csv")
 continents$Continent <-
   ordered(continents$Continent,
           c("Oceania", "Asia", "Africa", "S America", "N America", "Europe"))
