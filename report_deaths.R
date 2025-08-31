@@ -59,10 +59,10 @@ tseries.asia <- tseries[tseries$Country %in% asia,]
 tseries.africa <- tseries[tseries$Country %in% africa,]
 tseries.oceania <- tseries[tseries$Country %in% oceania,]
 
-## Total worst deaths
+## Countries with highest death rate
 pdf("report/deaths_total.pdf")
 barplotCorona(rate$Rate, names=rate$Country, col=rate$Color,
-              main="Countries with the most deaths",
+              main="Countries with the highest death rate",
               xlab="Deaths per 1000 inhabitants")
 
 ## Total worst doubling time
@@ -72,7 +72,7 @@ barplotCorona(doubling$Doubling, names=doubling$Country, col=doubling$Color,
 
 ## Total scatterplots
 ylab <- "Deaths per 1000"
-plotXY(total.worst,  ylab=ylab, main="Countries with the most deaths")
+plotXY(total.worst,  ylab=ylab, main="Countries with the highest death rate")
 plotXY(total.nordic, ylab=ylab, main="Nordic countries")
 plotXY(total.w.europe, ylab=ylab, main="Western Europe")
 plotXY(total.e.europe, ylab=ylab, main="Eastern Europe")
@@ -82,7 +82,7 @@ plotXY(total.asia,   ylab=ylab, main="Asia")
 plotXY(total.africa, ylab=ylab, main="Africa")
 plotXY(total.oceania, ylab=ylab, main="Oceania")
 
-## Total by continent
+## Death rate by continent
 world.c <- data.frame(Continent="(World)",
                       Population=sum(total.c$Population),
                       Deaths=sum(total.c$Deaths),
@@ -90,7 +90,7 @@ world.c <- data.frame(Continent="(World)",
 combined.c <- rbind(world.c, total.c)
 barplotCorona(combined.c$Rate, names=combined.c$Continent,
               col=c("gray95", rep("orange",6)),
-              main="Total deaths by continent",
+              main="Death rate by continent",
               xlab="Deaths per 1000 inhabitants")
 dev.off()
 
