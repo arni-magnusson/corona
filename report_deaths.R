@@ -61,12 +61,12 @@ tseries.oceania <- tseries[tseries$Country %in% oceania,]
 
 ## Countries with highest death rate
 pdf("report/deaths_total.pdf")
-barplotCorona(rate$Rate, names=rate$Country, col=rate$Color,
+barplotCorona(rate$Rate, names=rate$Country, col="forestgreen",
               main="Countries with the highest death rate",
               xlab="Deaths per 1000 inhabitants")
 
 ## Total worst doubling time
-barplotCorona(doubling$Doubling, names=doubling$Country, col=doubling$Color,
+barplotCorona(doubling$Doubling, names=doubling$Country, col="forestgreen",
               main="Countries with the shortest doubling time",
               xlab="Doubling time of deaths (days)")
 
