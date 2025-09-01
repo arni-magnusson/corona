@@ -33,7 +33,7 @@ rate$Rate <- rate$Rate / 1000        # plot per million
 world <- aggregate(cbind(Deaths,Daily)~Date, data=tseries, sum)
 worst <- tail(rate$Country, 9)
 
-## Europe vs US
+## Europe and US
 euro5 <- aggregate(Deaths~Date, tseries, sum, subset=Country %in% euro5)
 us <- tseries[tseries$Country=="US",]
 
@@ -105,17 +105,17 @@ for(i in seq_along(split.worst))
 legend("bottomright", names(split.worst), lwd=2, col=col, bty="n", inset=0.02,
        y.intersp=1.1)
 
-## Timeline Europe vs USA
+## Timeline Europe and USA
 plot(Deaths/1000~Date, data=euro5, type="l",
      ylim=lim(c(euro5$Deaths, us$Deaths)/1000), col=2, lwd=3,
-     main="Europe (de, uk, fr, it, sp) vs. USA", ylab="Deaths (thousands)")
+     main="Europe (de, uk, fr, it, sp) and USA", ylab="Deaths (thousands)")
 lines(Deaths/1000~Date, data=us, col=4, lwd=4, lty=3)
 legend("bottomright", c("Europe","USA"), lwd=c(3,4), lty=c(1,3), col=c(2,4),
        bty="n", inset=0.04)
 
 plot(log10(Deaths)~Date, data=euro5, type="l",
      ylim=c(2, log10(2*max(c(euro5$deaths, us$Deaths)))), col=2,
-     lwd=3, main="Europe (de, uk, fr, it, sp) vs. USA", yaxt="n")
+     lwd=3, main="Europe (de, uk, fr, it, sp) and USA", yaxt="n")
 axis(2, seq(floor(par("usr")[3]), floor(par("usr")[4])))
 lines(log10(Deaths)~Date, data=us, col=4, lwd=4, lty=3)
 legend("bottomright", c("Europe","USA"), lwd=c(3,4), lty=c(1,3), col=c(2,4),
